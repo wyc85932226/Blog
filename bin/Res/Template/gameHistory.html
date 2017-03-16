@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>game history</title>
+<link href="css/game.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript">
+//解析参数
+function hooyesQueryString(queryStringName){
+	var returnValue=""; 
+	var URLString=new String(document.location);
+	//URLString=URLString.toLowerCase();//转换为小写
+	var serachLocation=-1; 
+	var queryStringLength=queryStringName.length; 
+	do { 
+			serachLocation=URLString.indexOf(queryStringName+"\="); 
+			if (serachLocation!=-1) {
+				if ((URLString.charAt(serachLocation-1)=='?') || (URLString.charAt(serachLocation-1)=='&')) {
+					URLString=URLString.substr(serachLocation);
+					break; 
+				} 
+				URLString=URLString.substr(serachLocation+queryStringLength+1); 
+			}  
+	} while (serachLocation!=-1) 
+	if (serachLocation!=-1) { 
+		var seperatorLocation=URLString.indexOf("&"); 
+		if (seperatorLocation==-1) { 
+		   returnValue=URLString.substr(queryStringLength+1); 
+		} else { 
+		   returnValue=URLString.substring(queryStringLength+1,seperatorLocation); 
+		}
+	  } 
+	return returnValue;
+}
+$(document).ready(function(){
+	var gid = hooyesQueryString("gid");
+	var gentry = hooyesQueryString("gentry");
+	var gname = hooyesQueryString("gname");
+	var sid = hooyesQueryString("sid");
+	var urls = hooyesQueryString("urls");
+	$(".nuTit").html(gname+" "+sid+"服");
+	var accounts = urls.split("-");
+	var divStr = "";
+	$.each(accounts,function(idx){
+		var accs = accounts[idx].split(",");
+		var username = window.external.CallKWGameBox("Base64/?decode=" + accs[1]);
+		if(accs[0]=="true"){
+			divStr+="<a href=\"javascript:beginGame('WebGame','"+gentry+"?s="+sid+"','"+gname+"','"+gid+"','"+sid+"')\">"+username+"</a>";
+		}else{
+			divStr+="<a href=\"javascript:smallBeginGame('1','"+username+"','"+accs[2]+"','"+accs[3]+"','WebGame','"+gentry+"?s="+sid+"','"+gname+"','"+gid+"','"+sid+"')\">"+username+"</a>";
+		}
+	});
+	$(".nuTex").html(divStr);
+});
+</script>
+</head>
+<body>
+      <div class="number">
+            <a href="javascript:closeForm()" class="close"></a>
+            <p class="nuTit"></p>
+            <p class="h10"></p>
+            <div class="nuTex">
+
+            </div>
+      </div>
+</body>
+</html>

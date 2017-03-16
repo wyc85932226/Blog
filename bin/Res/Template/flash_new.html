@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+ <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ <title>ExternalInterfaceExample</title>
+<script type="text/javascript" src="js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript">
+	var gamesrc=new String(document.location);
+	//alert(gamesrc);
+
+function changeIframe(){
+	if($("#topFrame").attr("cols")=="*,13,150"){
+		$("#topFrame").attr("cols","*,13,0");
+	}else{
+		$("#topFrame").attr("cols","*,13,150");
+	}
+}
+
+</script>
+ </head>
+<frameset id="topFrame" rows="*" cols="*,13,150" framespacing="0" border="0" frameBorder="0" style="width: auto;" style="background-color:#000000;padding: 0px;margin: 0px;" onresize="resizeHeight()">
+	<frame id="gameiframe" src="./play_flash.html" noresize="noresize" scrolling="no">
+	<frame name="righlist" src="./middle.html" noresize="noresize" scrolling="no">
+	<frame name="righlist" src="./right.html" noresize="noresize" scrolling="no">
+</frameset>
+</html>

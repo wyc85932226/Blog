@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window sizebox="4,4,4,4" mininfo="1020,600" roundcorner="4,4">
+
+<Default name="Button" value="fadetime=&quot;300&quot;"/>
+<Default name="Option" value="fadetime=&quot;300&quot;"/>
+<Default name="ToolButton" value="fadetime=&quot;300&quot;"/>
+
+<Font name="微软雅黑" size="12" bold="false" default="true" />
+
+<SkinVerticalLayout name="layout_bk" skinid="1" fadetime="100" bkcolor="#ffffffff" inset="1,1,1,1" bordercolor="#55000000" bordersize="1" >
+    <VerticalLayout name="layout_head" height="56">
+        <!--title 区-->
+        <HorizontalLayout name="layout_title" inset="7,0,2,0" height="55">
+            <VerticalLayout width="210" inset="0,6,0,0">
+                <!--title-左侧用户区-->
+                <HorizontalLayout inset="0,1,0,0" >
+                    <UserPhoto name="userphoto" width="33" height="33" borderround="5,5"  normalimage="file='icon_portrait.png' source='0,0,33,33'" hotimage="file='icon_portrait.png' source='33,0,66,33'" pushedimage="file='icon_portrait.png' source='66,0,99,33'" />
+                    <TabLayout name="tab_userinfo" width="220" height="36" padding="8,0,0,0">
+                        <!--登录前-->
+                        <VerticalLayout name="userinfo_befor_login">
+                            <Control bkimage="icon_title.png" width="61" height="12" />
+                            <HorizontalLayout padding="0,4,0,0">
+                                <Button name="btn_login" width="48" height="18"  normalimage="file='btn_login.png' source='0,0,48,18'" hotimage="file='btn_login.png' source='48,0,96,18'" pushedimage="file='btn_login.png' source='96,0,144,18'" />
+                                <Button name="btn_register" width="48" height="18" padding="8,0,0,0" normalimage="file='btn_register.png' source='0,0,48,18'" hotimage="file='btn_register.png' source='48,0,96,18'" pushedimage="file='btn_register.png' source='96,0,144,18'" />
+                            </HorizontalLayout>
+                        </VerticalLayout>
+                        <!--登录中-->
+                        <VerticalLayout>
+                            <Text text="正在登录" textcolor="#ffffffff" />
+                            <Label width="16" height="16" bkimage="WebLoading.png" frametime="720" framenum="8" />
+                        </VerticalLayout>
+                        <!--登陆后-->
+                        <VerticalLayout name="userinfo_befor_login">
+                            <HorizontalLayout height="15">
+                                <Control name="icon_thirdtype" height="12" width="12" visible="false" padding="0,1,0,0" />
+                                <AutoSizeButton name="btn_username" textpadding="0,0,13,0" textcolor="#ffffffff" autowidth="true" height="15" maxwidth="150" align="left,vcenter" foreimage="file='btn_username.png' source='0,0,11,7' dest='-12,4,-1,11'" hotforeimage="file='btn_username.png' source='11,0,22,7' dest='-12,4,-1,11'" />
+                            </HorizontalLayout>
+                            <HorizontalLayout padding="0,1,0,0">
+                                <TabLayout name="layout_sign" width="57" height="18">
+                                    <Button name="btn_sign" width="44" height="18"  normalimage="file='btn_sign.png' source='0,0,45,18'" hotimage="file='btn_sign.png' source='45,0,90,18'" pushedimage="file='btn_sign.png' source='90,0,135,18'" />
+                                    <Button name="btn_aftersign" width="57" height="18"  normalimage="file='btn_aftersign.png' source='0,0,57,18'" hotimage="file='btn_aftersign.png' source='57,0,114,18'" pushedimage="file='btn_aftersign.png' source='114,0,171,18'" />
+                                </TabLayout>
+                                <Button name="btn_score" text="" textcolor="#ffffffff" height="18" maxwidth="100" align="left,vcenter" textpadding="50,0,0,0" padding="8,0,0,0" foreimage="file='btn_score.png' source='0,0,48,18' dest='0,0,48,18'" />
+                            </HorizontalLayout>
+                        </VerticalLayout>
+                    </TabLayout>
+                </HorizontalLayout>
+
+            </VerticalLayout>
+            <Control />
+            <!--title中间区域-->
+            <HorizontalLayout width="263">
+                <Container name="webgame" width="53" height="49" inset="0,6,10,0">
+                    <Option name="opt_webgame" group="grp_mainchannel" selected="true" normalimage="file='opt_webgame.png' source='129,0,172,43'" hotimage="file='opt_webgame.png' source='43,0,86,43'" pushedimage="file='opt_webgame.png' source='86,0,129,43'" selectedimage="file='opt_webgame.png' source='0,0,43,43'" selectedhotimage="file='opt_webgame.png' source='43,0,86,43'" />
+                </Container>
+                <!--<Option name="opt_xshow" group="grp_mainchannel" padding="10,0,0,0" width="58" height="58" normalimage="file='opt_xshow.png' source='174,0,232,58'" hotimage="file='opt_xshow.png' source='58,0,116,58'" pushedimage="file='opt_xshow.png' source='116,0,174,58'" selectedimage="file='opt_xshow.png' source='0,0,58,58'" selectedhotimage="file='opt_xshow.png' source='58,0,116,58'" /-->
+                <Container name="flash" width="53" height="49" inset="0,6,10,0">
+                    <Option name="opt_flash" group="grp_mainchannel" normalimage="file='opt_flash.png' source='129,0,172,43'" hotimage="file='opt_flash.png' source='43,0,86,43'" pushedimage="file='opt_flash.png' source='86,0,129,43'" selectedimage="file='opt_flash.png' source='0,0,43,43'" selectedhotimage="file='opt_flash.png' source='43,0,86,43'" />
+                </Container>
+                <Container name="mobilegame" width="53" height="49" inset="0,6,10,0">
+                    <Option name="opt_mobilegame" group="grp_mainchannel" padding="10,0,0,0" width="43" height="43" normalimage="file='opt_mobilegame.png' source='129,0,172,43'" hotimage="file='opt_mobilegame.png' source='43,0,86,43'" pushedimage="file='opt_mobilegame.png' source='86,0,129,43'" selectedimage="file='opt_mobilegame.png' source='0,0,43,43'" selectedhotimage="file='opt_mobilegame.png' source='43,0,86,43'" />
+                </Container>
+                <Container name="music" width="53" height="49" inset="0,6,10,0">
+                    <Option name="opt_music" group="grp_mainchannel" padding="10,0,0,0" normalimage="file='opt_music.png' source='129,0,172,43'" hotimage="file='opt_music.png' source='43,0,86,43'" pushedimage="file='opt_music.png' source='86,0,129,43'" selectedimage="file='opt_music.png' source='0,0,43,43'" selectedhotimage="file='opt_music.png' source='43,0,86,43'" />
+                </Container>
+                <Container name="store" width="53" height="49" inset="0,6,10,0">
+                    <Option name="opt_store" group="grp_mainchannel" padding="10,0,0,0" width="43" height="43" normalimage="file='opt_store.png' source='129,0,172,43'" hotimage="file='opt_store.png' source='43,0,86,43'" pushedimage="file='opt_store.png' source='86,0,129,43'" selectedimage="file='opt_store.png' source='0,0,43,43'" selectedhotimage="file='opt_store.png' source='43,0,86,43'" />
+                </Container>
+			</HorizontalLayout>
+            <HorizontalLayout inset="60,16,0,0" width="287">
+                <HorizontalLayout bkimage="file='edit_search_bk.png' source='0,0,7,7' corner='3,3,3,3'" inset="3,0,0,0" width="190" height="24" borderround="3,3" >
+                    <Edit name="edit_search" textpadding="3,0,0,0" height="24" maxchar="20" defaulttext="找游戏" />
+                </HorizontalLayout>
+                <Button name="btn_search" width="37" height="24" normalimage="file='btn_search.png' source='0,0,37,24'" hotimage="file='btn_search.png' source='37,0,74,24'" hotimage="file='btn_search.png' source='74,0,111,24'"/>
+            </HorizontalLayout>
+            <Control />
+            <HorizontalLayout width="136" inset="0,16,0,0">
+                <Button name="btn_skin" width="20" height="17" padding="0,0,0,0" normalimage="file='btn_skin.png' source='0,0,20,17'" hotimage="file='btn_skin' source='20,0,40,17'" pushedimage="file='btn_skin.png' source='40,0,60,17'" />
+                <Button name="btn_setting" width="20" height="17" padding="10,0,0,0" normalimage="file='btn_setting.png' source='0,0,20,17'" hotimage="file='btn_setting.png' source='20,0,40,17'" pushedimage="file='btn_setting.png' source='40,0,60,17'" />
+                <Button name="btn_min" width="20" height="17" padding="9,0,0,0" normalimage="file='btn_min.png' source='0,0,20,17'" hotimage="file='btn_min.png' source='20,0,40,17'" pushedimage="file='btn_min.png' source='40,0,60,17'" />
+                <TabLayout name="tablayout_max_restore" padding="9,0,0,0" width="20">
+                    <Button name="btn_max" width="20" height="17" normalimage="file='btn_max.png' source='0,0,20,17'" hotimage="file='btn_max.png' source='20,0,40,17'" pushedimage="file='btn_max.png' source='40,0,60,17'" />
+                    <Button name="btn_restore" width="20" height="17" normalimage="file='btn_restore.png' source='0,0,20,17'" hotimage="file='btn_restore.png' source='20,0,40,17'" pushedimage="file='btn_restore.png' source='40,0,60,17'" />
+                </TabLayout>
+                <Button name="btn_close" width="20" height="17" padding="8,0,0,0" normalimage="file='btn_close.png' source='0,0,20,17'" hotimage="file='btn_close.png' source='20,0,40,17'" pushedimage="file='btn_close.png' source='40,0,60,17'" />
+            </HorizontalLayout>
+        </HorizontalLayout>
+
+        <Control bkcolor="#22333333" height="1" />
+    </VerticalLayout> <!--end layout_head -->
+
+    <!--抽奖-->
+    <TabLayout name="layout_lottery" visible="false" float="true" pos="-194,0,-140,42" >
+        <Button name="btn_lottery_move" height="42" bkimage="file='btn_lottery.png' source='0,0,540,42'" tooltip="拉一下，试下手气" frametime="1000" framenum="10" fadetime="0" />
+        <HorizontalLayout>
+            <Control />
+            <Button name="btn_lottery" width="26" height="42" tooltip="拉一下，试试手气" normalimage="file='btn_lottery.png' source='540,0,566,42'" hotimage="file='btn_lottery.png' source='566,0,592,42'" pushedimage="file='btn_lottery.png' source='592,0,618,42'" />
+            <Control />
+        </HorizontalLayout>
+    </TabLayout>
+
+    <!--tab标签栏-->
+    <HorizontalLayout name="layout_tab" inset="4,2,5,0" height="25">
+        <HorizontalLayout inset="0,2,0,0" width="47">
+            <Button name="btn_navback" enabled="false" width="20" height="17" normalimage="file='btn_navback.png' source='0,0,20,17'" hotimage="file='btn_navback.png' source='20,0,40,17'" pushedimage="file='btn_navback.png' source='40,0,60,17'" disabledimage="file='btn_navback.png' source='60,0,80,17'" />
+            <Button name="btn_refresh" padding="7,0,0,0" width="20" height="17" normalimage="file='btn_refresh.png' source='0,0,20,17'" hotimage="file='btn_refresh.png' source='20,0,40,17'" pushedimage="file='btn_refresh.png' source='40,0,60,17'" />
+        </HorizontalLayout>
+        <Control width="10" />
+        <TabCtrlUI name="tabctrl" height="23" acceptdrag="true" dragtarget="true" opt_group="group_tabctrl" close_pos="-18,5,-5,18" close_width="13" close_height="13" opt_maxwidth="166" opt_minwidth="58" opt_padding="2,0,0,0" opt_textpadding="5,0,23,0" opt_textcolor="#FFffffff" opt_selecttextcolor="#ff000000" opt_normalimg="file='tab_opt.png' source='0,0,5,5' corner='2,2,2,2'" opt_hotimg="file='tab_opt.png' source='5,0,10,5' corner='2,2,2,2'" opt_pushimg="" opt_selectimg="file='tab_opt.png' source='10,0,15,5' corner='2,2,2,2'" home_opt_textpadding="5,0,5,0" home_opt_normalimg="file='tab_opt.png' source='0,0,5,5' corner='2,2,2,2'" home_opt_hotimg="file='tab_opt.png' source='5,0,10,5' corner='2,2,2,2'" home_opt_selectimg="file='tab_opt.png' source='15,0,20,5' corner='2,2,2,2'" close_normalimg="file='tab_btn_close.png' source='0,0,13,13'" close_hotimg="file='tab_btn_close.png' source='13,0,26,13'" close_pushimg="file='tab_btn_close.png' source='26,0,39,13'" close_selectnormalimg="file='tab_btn_close_select.png' source='0,0,13,13'" close_selecthotimg="file='tab_btn_close_select.png' source='13,0,26,13'" close_selectpushimg="file='tab_btn_close_select.png' source='26,0,39,13'" />
+        <HorizontalLayout inset="0,6,0,0" width="15">
+            <Button name="btn_showalltab" width="15" height="9" normalimage="file='btn_showalltab.png' source='0,0,15,9'" hotimage="file='btn_showalltab.png' source='15,0,30,9'" pushedimage="file='btn_showalltab.png' source='30,0,45,9'" />
+        </HorizontalLayout>
+    
+    </HorizontalLayout>
+
+	<!--内容面板-->
+	<TabLayout name="tablayout_html">
+	    <WebBrowser name="html_mainpage" />
+        <WndUI name="wnd_placeholder" bkcolor="#ff000000" />
+        <WebBrowser name="html_hide" />
+	</TabLayout>
+
+    <!--底部工具栏-->
+    <HorizontalLayout name="layout_tool" height="25" inset="7,5,7,0">
+        <Button name="btn_report" width="69" height="15" normalimage="file='btn_report.png' source='0,0,69,15'" hotimage="file='btn_report.png' source='69,0,138,15'" pushedimage="file='btn_report.png' source='138,0,207,15'" />
+        <ToolBarUI name="toolbar" buttonpadding="20" >
+            <!--更多-->
+            <ToolButton name="btn_more" float="true" visible="false" width="45" height="15" tag="1" normalimage="file='btn_more.png' source='0,0,45,15'" hotimage="file='btn_more.png' source='45,0,90,15'" pushedimage="file='btn_more.png' source='90,0,135,15'" />
+            <!--游戏加速-->
+            <ToolButton name="btn_speed" text="游戏加速" float="true" visible="false" width="69" height="15" tag="2" menuicon="icon_speed.png" normalimage="file='btn_speed.png' source='0,0,69,15'" hotimage="file='btn_speed.png' source='69,0,138,15'" pushedimage="file='btn_speed.png' source='138,0,207,15'" />
+            <!--保存进度-->
+            <ToolButton name="btn_saveprogress"  float="true" visible="false" width="69" height="15" tag="3" menuicon="icon_saveprogress.png" normalimage="file='btn_saveprogress.png' source='0,0,69,15'" hotimage="file='btn_saveprogress.png' source='69,0,138,15'" pushedimage="file='btn_saveprogress.png' source='138,0,207,15'" />
+            <!--小号多开-->
+            <ToolButton name="btn_subaccount" text="小号" enabled="false" float="true" visible="false" width="46" height="15" tag="4" menuicon="icon_subaccount.png" normalimage="file='btn_subaccount.png' source='0,0,46,15'" hotimage="file='btn_subaccount.png' source='46,0,92,15'" pushedimage="file='btn_subaccount.png' source='92,0,138,15'" disabledimage="file='btn_subaccount.png' source='138,0,184,15'" />
+            <!--全屏-->
+            <TabLayout name="tablayout_fullscreen" float="true" visible="false" width="45" height="15" >
+                <ToolButton name="btn_fullscreen" text="全屏" width="45" height="15" tag="5" menuicon="icon_fullscreen.png" normalimage="file='btn_fullscreen.png' source='0,0,45,15'" hotimage="file='btn_fullscreen.png' source='45,0,90,15'" pushedimage="file='btn_fullscreen.png' source='90,0,135,15'" />
+                <!--恢复全屏-->
+                <ToolButton name="btn_tool_restore" text="恢复全屏" width="45" height="15" tag="14" menuicon="icon_tool_restore.png" normalimage="file='btn_tool_restore.png' source='0,0,45,15'" hotimage="file='btn_tool_restore.png' source='45,0,90,15'" pushedimage="file='btn_tool_restore.png' source='90,0,135,15'" />
+            </TabLayout>
+            <!--修复-->
+            <ToolButton name="btn_repair" text="修复" float="true" visible="false" width="46" height="15" tag="6" menuicon="icon_repair.png" normalimage="file='btn_repair.png' source='0,0,46,15'" hotimage="file='btn_repair.png' source='46,0,92,15'" pushedimage="file='btn_repair.png' source='92,0,138,15'" />
+            <!--客服-->
+            <ToolButton name="btn_service" text="客服" float="true" visible="false" width="42" height="15" tag="7" menuicon="icon_service.png" normalimage="file='btn_service.png' source='0,0,42,15'" hotimage="file='btn_service.png' source='42,0,84,15'" pushedimage="file='btn_service.png' source='84,0,126,15'" />
+            <!--充值-->
+            <ToolButton name="btn_recharge" float="true" visible="false" width="46" height="15" tag="8" menuicon="icon_recharge.png" normalimage="file='btn_recharge.png' source='0,0,46,15'" hotimage="file='btn_recharge.png' source='46,0,92,15'" pushedimage="file='btn_recharge.png' source='92,0,138,15'" />
+            <!--桌面图标-->
+            <ToolButton name="btn_createicon" text="创建桌面图标" float="true" visible="false" width="93" height="15" tag="9" menuicon="icon_createicon.png" normalimage="file='btn_createicon.png' source='0,0,93,15'" hotimage="file='btn_createicon.png' source='93,0,186,15'" pushedimage="file='btn_createicon.png' source='186,0,279,15'" />
+            <!--静音-->
+            <ToolButton name="btn_mute" text="静音控制" float="true" visible="false" width="69" height="15" tag="10" menuicon="icon_mute.png" normalimage="file='btn_mute.png' source='0,0,69,15'" hotimage="file='btn_mute.png' source='69,0,138,15'" pushedimage="file='btn_mute.png' source='138,0,207,15'" />
+            <!--攻略-->
+            <ToolButton name="btn_strategy" text="攻略" float="true" visible="false" width="45" height="15" tag="11" menuicon="icon_strategy.png" normalimage="file='btn_strategy.png' source='0,0,45,15'" hotimage="file='btn_strategy.png' source='45,0,90,15'" pushedimage="file='btn_strategy.png' source='90,0,135,15'" disabledimage="file='btn_strategy.png' source='135,0,180,15'" />
+            <!--闹钟-->
+            <ToolButton name="btn_clock" text="闹钟" enabled="false" float="true" visible="false" width="45" height="15" tag="12" menuicon="icon_clock.png" normalimage="file='btn_clock.png' source='0,0,45,15'" hotimage="file='btn_clock.png' source='45,0,90,15'" pushedimage="file='btn_clock.png' source='90,0,135,15'" disabledimage="file='btn_clock.png' source='135,0,180,15'" />
+            <!--截图-->
+            <ToolButton name="btn_screenshot" text="截图" float="true" visible="false" width="45" height="15" tag="13" menuicon="icon_screenshot.png" normalimage="file='btn_screenshot.png' source='0,0,45,15'" hotimage="file='btn_screenshot.png' source='45,0,90,15'" pushedimage="file='btn_screenshot.png' source='90,0,135,15'" />
+            <!--游戏介绍-->
+            <ToolButton name="btn_gamebrief" text="游戏介绍" float="true" visible="false"  width="68" height="15" tag="15" normalimage="file='btn_gamebrief.png' source='0,0,68,15'" hotimage="file='btn_gamebrief.png' source='68,0,136,15'" pushedimage="file='btn_gamebrief.png' source='136,0,204,15'" disabledimage="file='btn_gamebrief.png' source='204,0,272,15'" />
+            <!--操作说明-->
+            <ToolButton name="btn_operate" text="操作说明" float="true" visible="false"  width="66" height="15" tag="16" normalimage="file='btn_operate.png' source='0,0,66,15'" hotimage="file='btn_operate.png' source='66,0,132,15'" pushedimage="file='btn_operate.png' source='132,0,198,15'" disabledimage="file='btn_operate.png' source='198,0,264,15'" />
+            <!--刷新-->
+            <ToolButton name="btn_tool_refresh" text="刷新" float="true"  visible="false"  width="46" height="15" tag="19" menuicon="icon_refresh.png" normalimage="file='btn_tool_refresh.png' source='0,0,46,15'" hotimage="file='btn_tool_refresh.png' source='46,0,92,15'" pushedimage="file='btn_tool_refresh.png' source='92,0,138,15'" />
+        </ToolBarUI>
+        
+    </HorizontalLayout>
+    <GlobalNotifyUI name="globalnotice" float="true" visible="false" height="20" width="500" timeperpixel="20" msgpadding="50" normalbkimage="file='notice_bk.png' source='0,0,3,3' corner='1,1,1,1'" hotbkimage="file='notice_bk.png' source='3,0,3,3' corner='1,1,1,1'" linkcolor="#ff000000" hotlinkcolor="#ff000000" />
+</SkinVerticalLayout>
+</Window>

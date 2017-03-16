@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window>
+
+<!--内容面板-->
+<HorizontalLayout>
+    <TabLayout name="tablayout_html" bkcolor="#ff000000">
+        <WebBrowser name="html_preload" />
+        <WebBrowser name="html_gameweb" />
+    </TabLayout>
+    <WebBrowser name="html_rightbar" visible="false" width="170" />
+</HorizontalLayout>
+
+</Window>

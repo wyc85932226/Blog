@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window size="10,58" roundcorner="3,3">
+
+<!--内容面板-->
+<TabLayout name="tablayout_bk" bkcolor="#ff000000">
+    <Button name="btn_unfold" bkimage="rightbar_unfold.png" width="10" height="58" />
+    <Button name="btn_fold" bkimage="rightbar_fold.png" width="10" height="58" />
+</TabLayout>
+
+</Window>

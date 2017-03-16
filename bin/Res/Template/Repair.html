@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link href="css2/xf.css?2.css" type="text/css" rel="stylesheet" />
+		<title>修复工具</title>
+		<script>
+			function showOk(){
+				document.getElementById("loading").style.display="none";
+				document.getElementById("ok").style.display="block";
+			}
+		</script>
+	</head>
+	<body>
+		<div class="chAbox" id="loading">
+              <p class="titb"><img src="img/df.gif"></p>
+              <p class="titc">修复中，请稍后...</p>
+        </div>
+        <div class="chAbox" id="ok" style="display: none">
+                  <p class="h10"></p>
+                  <p class="h10"></p>
+                  <p class="titc">修复完成!</p>
+                  <p class="h10"></p>
+                  <a href="javascript:close();" class="btna">关闭</a>
+        </div>
+	</body>
+	<script>
+		function close(){
+			try{
+				window.external.CallKWGameBox("POPDLGCLOS");
+			}catch(err){}
+		}
+	</script>
+</html>
+
+
+

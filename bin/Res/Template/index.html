@@ -1,0 +1,578 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link href="css/game.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript" src="js/cookie.js"></script>
+<script type="text/javascript">
+	var gbase = 'http://gamebox.kuwo.cn/NewKwGameBox';
+	var loginonline_time;
+	//用户信息
+	lu = {};
+	lu.userid = null;
+	lu.username = null;
+	lu.uph = null;
+	lu.pwd = null;
+	lu.t3 = null;
+	lu.uname3 = null;
+	lu.uhead3 = null;
+	//是否自动登录
+	var isAutologin = false;
+	//标识登录过程完成(不管登录成功或者失败)
+	var isLoginOk = false;
+	//登录超时时间
+	var loginTimeOut = 20000;
+	//积分在线时长
+	var creditTimeOut = 1*60*60*1000;
+	
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>盒外请求开始<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	var OpenGameOfID_jsonStr;
+	//通过游戏ID和服务器打开游戏jsonStr : "[{'gameid':'','serverid':''}]"
+	function OpenGameOfID(jsonStr){
+		var obj = eval(jsonStr);
+  		var firstrun = obj[0].firstrun;
+		if(firstrun == true && isAutologin == true){
+			OpenGameOfID_jsonStr = jsonStr;
+			openTimer();
+		}else{
+			Start_OpenGameOfID(jsonStr);
+		}	
+	}
+	function Start_OpenGameOfID(jsonStr){
+		OpenGameOfID_jsonStr = undefined;
+		var obj = eval(jsonStr);
+		var GID = obj[0].gameid;
+		var SERVER_ID = obj[0].serverid;
+		var GAME_TYPE = obj[0].gametype;
+		if(GID != undefined && GAME_TYPE=="FlashGame"){
+			reqAndOpenFlashGameById(GID);
+		}else if(GID != undefined && SERVER_ID != undefined){
+			if(GID=="0"){
+				OpenWeb('New','http://x.kuwo.cn/KuwoLive/ReFlowGameServlet?from=gbox','酷我秀场','酷我秀场','酷我秀场');
+			}else{
+				reqAndOpenGameById(GID,SERVER_ID);
+			}
+		}
+	}
+	//通过URL打开游戏jsonStr : "[{'url':''}]"*
+	var OpenGameOfURL_jsonStr;
+	function OpenGameOfURL(jsonStr){
+		try{
+			var obj = eval(jsonStr);
+  			var firstrun = obj[0].firstrun;
+			if(firstrun == true && isAutologin == true){
+				OpenGameOfURL_jsonStr = jsonStr;
+				openTimer();
+			}else{
+				Start_OpenGameOfURL(jsonStr);
+			}
+		}catch(e){}	
+	}
+	function Start_OpenGameOfURL(jsonStr){
+		OpenGameOfURL_jsonStr = undefined;
+		var obj = eval(jsonStr);
+		var url = obj[0].url;
+		//2013音乐盒打开游戏盒-------liujia
+		if(url.indexOf("http://game.kuwo.cn/g/st/mbox2013game")!=-1){
+			$.getJSON("http://gamebox.kuwo.cn/NewKwGameBox/mbox2013game.jsp?jsoncallback=?",
+				function(result){
+					var link = result.link;
+					if(link.indexOf("gameid")!=-1 && link.indexOf("serverid")!=-1 ){
+						var begin=link.indexOf("gameid=");
+						var link1 = link.substr(begin);
+						link1 = link1.replaceAll("&","=");
+						var strs1= new Array();   
+						strs1=link1.split("=");
+						reqAndOpenGameById(strs1[1],strs1[3],link);
+						
+                      }else if(link.indexOf("flashgameid")!=-1){
+                        var begin=link.indexOf("flashgameid=");
+                        var url1 = link.substr(begin);
+                        url1 = url1.replaceAll("&","=");
+                        var strs= new Array();   
+                        strs=url1.split("=");
+                        reqAndOpenFlashGameById(strs[1]);
+                      } else {
+                          OpenWeb("New",url,"酷我游戏","酷我游戏","酷我游戏");
+                      }
+				}
+			);
+		}	
+		//特殊处理,如果遇到该链接则不作任何处理
+		//判断参数
+		//现在游戏盒和音乐盒生成的桌面图标以及音乐盒的其它入口，都带gameid和serverid（liujia，20120726）
+		else if(url.indexOf("gameid")!=-1 && url.indexOf("serverid")!=-1 ){
+			var begin=url.indexOf("gameid=");
+			var url1 = url.substr(begin);
+			url1 = url1.replaceAll("&","=");
+			var strs= new Array();   
+			strs=url1.split("=");
+			
+			//---------判断音乐盒生成的图标，如果是免注册用户，直接进游戏（与官网的体验同步）------liujia
+			if(url.indexOf("ver")!=-1 && url.indexOf("uid")!=-1 && url.indexOf("bid")!=-1){
+				$.getJSON("http://gamebox.kuwo.cn/NewKwGameBox/cookieUtil.jsp?mzcgid=mzcgid&mzcsid=mzcsid&jsoncallback=?",
+					 function(result){
+						var mzcgid = result.mzcgid;
+						var mzcsid = result.mzcsid;
+						if(mzcgid==strs[1] && mzcsid==strs[3]){	
+							reqAndOpenGameById(strs[1],strs[3]);
+						}else{
+							var mgBeginIndex = url.indexOf("url=http://");
+							var mgEndIndex = url.indexOf(".kuwo.cn");
+							var mgGameWeb = url.substring(mgBeginIndex+11,mgEndIndex);
+							if(mgGameWeb == "game"){
+								OpenWeb("New",url,"酷我游戏","酷我游戏","酷我游戏");
+							}else{
+								reqAndOpenGameByWeb(mgGameWeb);
+							}
+						}
+			 		}
+				 );
+			}else {
+				if(strs[1]=="0"){
+					OpenWeb('New','http://x.kuwo.cn/KuwoLive/ReFlowGameServlet?from=gbox','酷我秀场','酷我秀场','酷我秀场');
+				}else{
+					reqAndOpenGameById(strs[1],strs[3],url);
+				}
+			}
+		//flash游戏广告入口
+		}else if(url.indexOf("flashgameid")!=-1){
+			var begin=url.indexOf("flashgameid=");
+			var url1 = url.substr(begin);
+			url1 = url1.replaceAll("&","=");
+			var strs= new Array();   
+			strs=url1.split("=");
+			reqAndOpenFlashGameById(strs[1]);
+		}
+		//以前音乐盒生成的老游戏桌面图标，除了“酷我游戏”首页那个图标（这个图标在游戏盒已经启动的情况下，什么也不做）
+		//else if(url.indexOf("http://g.koowo.com/g.real?aid=text_ad_1002&url=http://game.kuwo.cn") == -1){
+		//	var beginStr = "url=http://";
+		//	var endStr = ".kuwo.cn";
+		//	var beginIndex = url.indexOf(beginStr);
+		//	var endIndex = url.indexOf(endStr);
+			//这里做了个处理就是把at和ap这2个参数名改掉
+			//url = url.replace("at=","atTemp=");
+			//url = url.replace("ap=","apTemp=");
+		//	url = url.replaceAll("gamebox1","gamebox3");
+		//	SendStat('OpenGameOfURL','USER');
+			//如果URL符合匹配条件则解析官网URL gameWeb
+		//	if(beginIndex != -1 && endIndex != -1){
+		//		beginIndex += beginStr.length;
+		//		var gameWeb = url.substring(beginIndex,endIndex);
+		//		if(gameWeb == "game"){
+		//			OpenWeb("New",url,"酷我游戏","酷我游戏","酷我游戏");
+		//		}else{
+		//			reqAndOpenGameByWeb(gameWeb);
+		//		}				
+		//	}else{
+		//		OpenWeb("New",url,"酷我游戏","酷我游戏","酷我游戏");
+		//	}
+		//}
+	}
+	//验证是否登录完成的timer
+	var i = 30;
+	var timer;
+	function openTimer(){
+		if(i <= 0){
+			clearTimeout(timer);
+		}else{
+			if(isLoginOk == true){
+				openGameOf();
+			}else{
+				timer = setTimeout("openTimer()",1000);
+				i--;
+			}
+		}
+	}
+	//验证是否打开弹窗的游戏
+  	function openGameOf(){
+  		//打开游戏
+		if(OpenGameOfID_jsonStr != undefined){
+			Start_OpenGameOfID(OpenGameOfID_jsonStr);
+		}
+		if(OpenGameOfURL_jsonStr != undefined){
+			Start_OpenGameOfURL(OpenGameOfURL_jsonStr);
+		}
+  	}
+	
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>盒外请求结束<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>盒内请求开始<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	//登陆成功后统一调用游戏盒登录
+	function callCommonLogin(jsonStr){
+		var obj = eval(jsonStr);
+		//'[{"uid":"' + uid + '","account":"' + uname + '","uph":"' + uph + '","pwd":"' + pwd + '","thirdname":"' + uname3 + '","thirdtype":"' + t3 + '","thirdhead":"' + uhead3 + '"}]'
+		var autologin = true;
+		if(typeof obj[0].autologin != "undefined"){
+			autologin = obj[0].autologin;
+		}
+		callGBoxLogin(obj[0].account,obj[0].pwd,obj[0].uid,obj[0].uph,autologin,obj[0].thirdtype,obj[0].thirdname,obj[0].thirdhead);
+	}
+	
+	//弹出登录框登录成功后调用jsonStr : "[{'userid':'22943991','username':'zijuntang','uph':'1177465911','sid':'4554546','userimg':'aaa.jpg'}]"
+	function callLoginSucceedInfo(jsonStr){
+		var obj = eval(jsonStr);
+		var userid = obj[0].userid;
+		//页面都加载完后，把闹钟的信息给客户端
+		getTrueClock(userid);
+	}
+	//导流页登录调用jsonStr : "[{'userid':'22943991','username':'zijuntang','uph':'1177465911'}]"
+	function third_party_Login(jsonStr){
+		var userInfoObj = eval(userInfoStr);
+  		var userid = userInfoObj[0].uid;
+  		var gid = userInfoObj[0].gid;
+  		var svrid = userInfoObj[0].svrid;
+  		
+  	    //记录已玩游戏
+  		if(gid != undefined && gid != "" && svrid != undefined && svrid != ""){
+  			reqPlayGame(userid,gid,svrid);
+  		}
+  		var userid = obj[0].userid;
+		//页面都加载完后，把闹钟的信息给客户端
+		getTrueClock(lu.userid);
+  	    
+	}
+	//打开恢复窗口中要恢复的游戏
+	function openRecoveryGame(jsonStr){
+		var allObj = eval(jsonStr);
+		for(var i = 0 ; i < allObj.length ; i++){
+			var openGameObj = allObj[i];
+			if(openGameObj.GameType == "WebGame"){
+				reqAndOpenGameById(openGameObj.GameID,openGameObj.SvrID);
+			}else{
+				reqAndOpenFlashGameById(openGameObj.GameID);
+			}
+		}
+	}
+	//登录
+	function Login(jsonStr){
+		var obj = eval(jsonStr);
+		var uname = obj[0].account;
+		var uid = obj[0].uid;
+		var pwd = obj[0].pwd;
+		var uph = obj[0].uph;
+		var t3 = '';
+		var uname3 = '';
+		var uhead3 = '';
+
+	    if(obj[0].thirdtype != null) {
+			t3 = obj[0].thirdtype;
+			uhead3 = obj[0].userimg;
+			uname3 = obj[0].thirdname;
+			uname3 = decodeURIComponent(uname3);
+		}
+		callGBoxLogin(uname,pwd,uid,uph,true,t3,uname3,uhead3);
+	}
+	//发送统计
+	function callJsSendStat(jsparam){
+		var array = jsparam.split("|");
+		var ACTION = array[0];
+		var FROM = array[1];
+		SendStat(ACTION,FROM);
+	}
+	//签到信息
+	function signed(score){
+		execSign("usersign","1",score);
+	}
+	//调用退出登录
+	function callLogout(){
+		//判断是否有网页游戏被打开
+		var openNum = GetOpenGameNum("WebGame");
+		if(openNum > 0){
+			if(confirm("当前有"+openNum+"个网页游戏处于打开状态,点击确定将关闭游戏并退出登录!")){
+				exit();
+			}
+		}else{
+			exit();
+		}
+	}
+	//小游戏页广告进游戏
+	function opengameurl(url){
+		if(url.indexOf("gameid")!=-1 && url.indexOf("serverid")!=-1 ){
+			var begin=url.indexOf("gameid=");
+			var url1 = url.substr(begin);
+			url1 = url1.replaceAll("&","=");
+			var strs= new Array();   
+			strs=url1.split("=");
+			reqAndOpenGameById(strs[1],strs[3],url);
+		}
+	}
+	//获取今天的签到记录
+  	function checkSigned(userid){
+  		$.getJSON("http://gamebox.kuwo.cn/NewKwGameBox/checkSigned?userid="+userid+"&jsoncallback=?", 
+  			function(result){
+  				//[{"sign":"0","sum":"2"}] 今天未签到 
+  				//[{"sign":"1","sum":"2"}] 今天已经签到 
+  				//[{"sign":"-1"}] 获取积分失败
+  				if(result[0].sign=="0"){
+  					execSign("checksigned",result[0].sign,result[0].sum);
+  				}else if(result[0].sign=="1"){
+  					execSign("checksigned",result[0].sign,result[0].sum);
+  				}else{
+  					execSign("checksigned",result[0].sign);
+  				}
+  			}
+  		);
+  	}
+   //客户端调用签到
+  	function userSign(userid){
+  		$.getJSON("http://gamebox.kuwo.cn/NewKwGameBox/sign2014?userid="+userid+"&jsoncallback=?", 
+  			function(result){
+  				//[{"sign":"0","addscore":"1","sum":"2"}]  签到成功
+  				//[{"sign":"1","sum":"2"}] 已经签到过
+  				//[{"sign":"-1"}] 签到失败
+  				if(result[0].sign=="0"){
+					execSign("usersign",result[0].sign,result[0].sum,result[0].addscore);
+				}else if(result[0].sign=="1"){
+					execSign("usersign",result[0].sign,result[0].sum);
+				}else{
+					execSign("usersign",result[0].sign);
+				}
+  			}
+  		);
+  	}
+   //游戏搜索联想
+   function simplesearch(str){
+	   var searchValue = window.external.CallKWGameBox("Base64/?decode=" + str);
+	   //var searchValue = '梦幻';
+	   jQuery.getJSON("http://gamebox.kuwo.cn/NewKwGameBox/simplesearch_B?jsoncallback=?",{searchValue: searchValue}, 
+			function(result){
+		   		var strs = "";
+	  	 		if(result.length > 0){
+	  	 			$.each(result,function(idx){
+	  	 				strs+=result[idx].NAME+",";
+	  	 			});
+	  	 			if(strs.indexOf(",")!=-1){
+	  	 				strs = strs.substr(0,strs.length-1);
+	  	 			}
+	  	 		}
+	  	 		window.external.CallKWGameBox("Search/?word="+str+"&tip="+window.external.CallKWGameBox("Base64/?encode=" + strs));
+	   		}
+	   );
+   }
+   //商城搜索联想
+   function mallsearch(str){
+	   var searchValue = window.external.CallKWGameBox("Base64/?decode=" + str);
+	   //var searchValue = '神曲';
+	   jQuery.getJSON("http://gamebox.kuwo.cn/NewKwGameBox/mallSearch?jsoncallback=?",{searchValue: searchValue}, 
+			function(result){
+		   		var strs = "";
+	  	 		if(result.length > 0 && typeof result[0].sum =="undefined"){
+	  	 			$.each(result,function(idx){
+	  	 				strs+=result[idx].name+",";
+	  	 			});
+	  	 			if(strs.indexOf(",")!=-1){
+	  	 				strs = strs.substr(0,strs.length-1);
+	  	 			}
+	  	 		}
+	  	 		window.external.CallKWGameBox("Search/?word="+str+"&tip="+window.external.CallKWGameBox("Base64/?encode=" + strs));
+	   		}
+	   );
+   }
+   //全局公告
+   function noticenew(){
+	   jQuery.getJSON("http://gamebox.kuwo.cn/NewKwGameBox/getNoticeNew?jsoncallback=?",
+			function(result){
+		 		var returnParas="";
+		   		if(typeof result[0].sum=="undefined"){
+		 			$.each(result,function(idx){
+		 				var content = window.external.CallKWGameBox("Base64/?encode=" + result[idx].content);
+		 				var link = window.external.CallKWGameBox("Base64/?encode=" + result[idx].link);
+		 				returnParas+="msg"+idx+"="+content+"&url"+idx+"="+link+"&";
+		 			});
+		 			returnParas = returnParas.substr(0,returnParas.length-1);
+		 		}
+		   		window.external.CallKWGameBox("GlobalNotify/?"+returnParas);
+	   		}
+	   );
+   }
+  //公告进游戏专用
+   function OpenGameOfNoticeURL(str){
+   	   var url = window.external.CallKWGameBox("Base64/?decode=" + str);
+   	   if(url.indexOf("gameid")!=-1 && url.indexOf("serverid")!=-1 ){
+   			var begin=url.indexOf("gameid=");
+   			var url1 = url.substr(begin);
+   			url1 = url1.replaceAll("&","=");
+   			var strs= new Array();   
+   			strs=url1.split("=");
+   			reqAndOpenGameById(strs[1],strs[3],url);
+   	   }else{
+   		   OpenTipDlg("抱歉，无法进入游戏","确定","");
+   	   }
+   }
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>盒内请求结束<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>登录逻辑开始<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	var loginResult = function(result){
+		var obj = result;
+		if(obj[0].logintype == "loginByCookie"){
+			lu.userid = obj[0].userid;
+			lu.uph = obj[0].uph;
+			lu.pwd = '';
+			lu.t3 = obj[0].t3;
+			lu.username = obj[0].username;
+			lu.uhead3 = obj[0].pic3;
+			lu.uname3 = obj[0].uname3;
+			isAutologin = true;
+			if(lu.userid.length > 0 && lu.username.length>0 && lu.uph.length>0) {
+				callGBoxLogin(lu.username,lu.pwd,lu.userid,lu.uph,isAutologin, lu.t3, lu.uname3, lu.uhead3);
+			}else{
+				CallGBoxLoginFailed();
+			}
+			isLoginOk = true;
+		}else{
+			lu.userid = obj[0].userid;
+			lu.username = obj[0].username;
+			lu.uph = obj[0].uph;
+			if(obj[0].logintype == "loginBySid" || obj[0].logintype == "loginByUph"){
+				lu.pwd = '';
+			}
+			try{
+				lu.uhead3 = obj[0].userimg;
+			}catch(e){}
+			if(typeof obj[0].t3 != "undefined" && obj[0].t3 != null) {
+				lu.t3 = obj[0].t3;
+				lu.uhead3 = obj[0].userimg;
+				lu.uname3 = '';
+				try {
+					lu.uname3 = obj[0].username3;
+				} catch(e) {
+					lu.uname3 = obj[0].uname3;
+				}
+			}
+			if(typeof obj[0].userid != "undefined" && obj[0].userid != null && obj[0].userid != 0){
+				callGBoxLogin(lu.username,lu.pwd,lu.userid,lu.uph,isAutologin, lu.t3, lu.uname3, lu.uhead3);
+			}else{
+				var hintStr = "";
+				if(obj[0].errorInfo == "error"){
+	  				hintStr = "自动登录失败，请重新登录!";
+	  			}
+				CallGBoxLoginFailed();
+		  		OpenTipDlg(hintStr,"确定","");
+			}
+			isLoginOk = true;
+		} 
+		
+	}
+	function autorun(){
+		//获取用户本地信息
+		var jsonstr = GetUserInfo();
+		if(jsonstr == null || jsonstr.length < 1) {
+			return;
+		}
+		var obj = eval(jsonstr);
+		
+		//[{'account':'JohnsonLi1980', 'pwd':'secret', 'uid':'22943991',
+		//'uph':'1177465911', 'autologin':'true', 'rempwd':'true', 'thirdtype':'qq, 'thirdname':'qq',
+		//'thirdhead':'http://www.qq.com/head.gif'}]
+		lu.userid = obj[0].uid;
+		lu.username = obj[0].account;
+		lu.uph = obj[0].uph;
+		lu.pwd = obj[0].pwd;
+		lu.t3 = obj[0].thirdtype;
+		lu.uname3 = obj[0].thirdname;
+		lu.uhead3 = obj[0].thirdhead;
+		lu.externuid = obj[0].externuid;
+		lu.externsid = obj[0].externsid;
+		lu.externthirdtype = obj[0].externthirdtype;
+		isAutologin = obj[0].autologin;
+		var autoLogin = isAutologin;
+		//QQ改为不自动登陆
+		if(obj[0].thirdtype=="qq"||obj[0].thirdtype=="weibo"){
+			autoLogin=false;
+		}
+		if(autoLogin || (lu.externuid && lu.externsid && lu.externsid != "0")){
+			CallGBoxBeginLogin();
+			var number = Math.random();
+			number = number * 1000000000;
+			number = Math.ceil(number);
+			$.ajax({url:'http://gamebox.kuwo.cn/NewKwGameBox/login?ver=v3.2&act=getInfo&userName=' + encodeURIComponent(lu.username) + '&passWord=' + encodeURIComponent(lu.pwd) + '&uph=' + lu.uph + '&externuid=' + encodeURIComponent(lu.externuid) + '&externsid=' + encodeURIComponent(lu.externsid) + '&randomNumber=' + number + '&t3=' + lu.t3 + '&externthirdtype=' + lu.externthirdtype + '&callback=?',
+				type:'get',
+				timeout:loginTimeOut,
+				dataType:'jsonp',
+				cache:false,
+				success:loginResult,
+				error:function(){
+					CallGBoxLoginFailed();
+					OpenTipDlg("自动登录失败，请重新登录","确定","");
+					isLoginOk = true;
+				}
+			});
+		}else{
+			isLoginOk = true;
+		}
+	}
+	function callGBoxLogin(username,pwd,userid,uph,isAutologin,t3,uname3,uhead3){
+		try{
+			lu.userid = userid;
+			lu.username = username;
+			lu.uph = uph;
+			lu.pwd = pwd;
+			lu.t3 = t3;
+			lu.uname3 = uname3;
+			lu.uhead3 = uhead3;
+			isAutologin = isAutologin;
+			LobbyLogin_Web_10(username,pwd,userid,uph,uhead3,isAutologin,t3,uname3,uhead3);
+			//页面都加载完后，把闹钟的信息给客户端
+			getTrueClock(userid);
+			 //在线时长
+			loginonline_time = setInterval("loginOnline()",creditTimeOut);
+		}catch(error){}
+	}
+	function exit(){
+		isLoginOk = false;
+		try{
+		  	//调用游戏盒退出
+  			CallGBoxLogout();
+		}catch(error){}
+		try{
+			//通知服务器登出
+			reqLogout();
+  			//删除cookie
+			lu.userid = null;
+			lu.username = null;
+			lu.uph = null;
+			lu.pwd = null;
+			lu.t3 = null;
+			lu.uhead3 = null;
+			lu.uname3 = null;
+  			delCookie('username');
+  			delCookie('userid');
+  			delCookie('uph');
+  			delCookie('gadtype');
+			delCookie('gadposition');
+			
+			//删除定时器
+			clearTimeout(loginonline_time);
+			
+			//删除cookie
+			delCookie('fne');
+		}catch(error){}
+	}
+	//登出
+  	function reqLogout(){
+  		var number = Math.random();
+		number = number * 1000000000;
+		number = Math.ceil(number);
+		var userid = lu.userid;
+  	 	$.getJSON('http://gamebox.kuwo.cn/NewKwGameBox/logout?userid=' + userid + '&randomNumber=' + number + '&callback=?',
+  	 		function(result){}
+  	 	);
+	}
+    //在线时间2个小时
+  	function loginOnline(){
+  		var userid = lu.userid;
+  		$.getJSON("http://gamebox.kuwo.cn/NewKwGameBox/loginOnline13?userId="+userid+"&jsoncallback=?", function(result){
+  			if(result[0].succ=="3"){
+  				clearTimeout(loginonline_time);
+  			}
+  		});
+  	}
+//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>登录逻辑结束<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	//自动执行方法
+	autorun();
+</script>
+</head>
+<body>
+</body>
+</html>

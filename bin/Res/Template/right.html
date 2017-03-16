@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>游戏盒</title>
+<style type="text/css">
+body,h1,h2,h3,h4,h5,p,blockquote,dl,dt,dd,ul,ol,li,pre,form,fieldset,button,input,textarea,th,td,*{margin:0;padding:0;}
+body,button,input,select,textarea{font:12px  "微软雅黑","微软雅黑",arial,sans-serif;}
+address,cite,dfn,em,var{font-style:normal;}
+ul,ol{list-style:none;}
+img{border:0;} .dis{ display:block;} 
+a{ color:#b1a5a0; text-decoration:none;}
+.h10{ height:10px; overflow:hidden; clear:both; font-size:0;}
+/*******public class*********/
+.fl{ float:left;} .fr{ float:right;} .fb{ font-weight:bold;} .tr{ text-align:right;}.dis{display:block;}.mr10{margin-right:10px}.pd10{padding:0 10px;}
+.h10{height:10px;font-size:0;overflow:hidden;clear:both;}
+body{ background:#FFFFFF;}
+.openDor1{width:13px; height:43px; float:right;background: url(img/opena.gif); margin:300px 3px 0 0;}
+.openDor1:hover{background: url(img/openb.gif)}
+.openDor1:active{background: url(img/openc.gif)}
+</style>
+</head>
+
+ <body>
+	<iframe id="gameiframe" width="150" height="622" scrolling="no" frameborder="0" src=""></iframe>
+  <script type="text/javascript">
+
+			var gameurl=new String(top.window.gamesrc);
+			//之前的逻辑有问题，例如像这种url:gameId=22085?gameId=22085&gameName=,取到的gameid=22085?gameId=22085,就会出错 
+// 			var gameid=gameurl.substr(gameurl.indexOf("gameId")+7,gameurl.indexOf("gameName")-gameurl.indexOf("gameId")-8); 
+			//改后的逻辑，直接用正则表达式取gameId和gameName之间的数字，即为gameid 
+			var gameid=gameurl.match(/gameId=(\d*)&gameName=/)[1];
+			document.getElementById("gameiframe").src = "http://gamebox.kuwo.cn/NewKwGameBox/getHotFlashGames?gameid="+gameid;
+ </script>
+ </body> 
+      
+      
+</html>

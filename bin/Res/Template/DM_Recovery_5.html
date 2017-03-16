@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<script>
+	//window.onerror = function(){return true;}
+</script>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="css2/base.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript" src="js/cookie.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+<style>
+.huifu_set{OVERFLOW-Y:auto;padding-left:60px;font-size:14px;padding-top: 2px;height: 80px;width:250px;}
+.huifu_set1{padding-left:60px;font-size:14px;line-height:21px;margin-bottom:5px;}
+.huifu_set p{text-indent:20px;color:#ff6600;height:16px;line-height:16px;margin-top: 4px}
+</style>
+<script>
+	var allObj;
+	$(document).ready(function(){
+		var recoveryInfo = getRecoveryInfo();
+		var obj = eval(recoveryInfo);
+		allObj = obj;
+		var contentHtml = "";
+		for(var i = 0 ; i < obj.length ; i++){
+			contentHtml += "<p class=\"checked\" style=\" overflow: hidden;\" onclick='clickCheckBox(\"checkBox"+i+"\")' id='checkBox"+i+"' name='checkBox'>"+obj[i].GameName+"</p>";
+		}
+		$("#contentDiv").html(contentHtml);
+		
+	});
+	function getRecoveryInfo(){
+		var recoveryInfo;
+		try{
+			recoveryInfo = window.external.CallKWGameBox("System/?src=SysErr_Web&action=get");
+		}catch(e){}
+		return recoveryInfo;
+	}
+	function clickCheckBox(idName){
+		var className = $("#"+idName).attr("class");
+		className = className == "checked" ? "no_checked" : "checked";
+		$("#"+idName).attr("class",className);
+	}
+	function recovery(){
+		var checkOpenStr = "[";
+		var index = 0;
+		var checkBoxArray = $("[name=checkBox]");
+		for(var i = 0 ; i < checkBoxArray.length ; i++){
+			var className = $(checkBoxArray[i]).attr("class");
+			if(className == "checked"){
+				var openGameObj = allObj[i];
+				index++;
+				if(index > 1){
+					checkOpenStr += ",";
+				}
+				checkOpenStr += "{";
+				checkOpenStr += "'GameID':'"+openGameObj.GameID+"',";
+				checkOpenStr += "'SvrID':'"+openGameObj.SvrID+"',";
+				checkOpenStr += "'GameType':'"+openGameObj.GameType+"',";
+				checkOpenStr += "'GameName':'"+openGameObj.GameName+"'";
+				checkOpenStr += "}";
+			}
+		}
+		checkOpenStr += "]";
+		//调用登录区域进行打开
+		callJScript('UserList','openRecoveryGame',checkOpenStr);
+		try{
+			window.external.CallKWGameBox("System/?src=SysErr_Web&action=ok");
+		}catch(e){}
+	}
+	function clickCancel(){
+		try{
+			window.external.CallKWGameBox("System/?src=SysErr_Web&action=cancel");
+		}catch(e){}
+	}
+</script>
+<title>恢复</title>
+</head>
+  <body>
+  <div class="supervise" style="width:360px">
+  <div class="huifu_set1">您是否要恢复上次玩过的游戏？</div>
+			<div class="huifu_set" id="contentDiv">
+			</div>
+		<div class="bottomblue" style="border:0">
+			<a href="javascript:void(0);"   onclick="clickCancel();try{event.srcElement.blur();}catch(e){}" class="blue_btn">取消</a>
+			<a href="javascript:void(0);" onclick="recovery();try{event.srcElement.blur();}catch(e){}" class="blue_btn">恢复</a>
+		</div>
+	</div>
+  </body>
+</html>

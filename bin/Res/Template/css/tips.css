@@ -1,0 +1,131 @@
+@charset "utf-8";
+/* CSS Document */
+body,h1,h2,h3,h4,h5,p,blockquote,dl,dt,dd,ul,ol,li,pre,form,fieldset,button,input,textarea,th,td,*{margin:0;padding:0;}
+body,button,input,select,textarea{font:12px  "微软雅黑","微软雅黑",arial,sans-serif;}
+address,cite,dfn,em,var{font-style:normal;}
+ul,ol{list-style:none;}
+img{border:0;} .dis{ display:block;} 
+a{ color:#b1a5a0; text-decoration:none;}
+a:hover{ text-decoration: underline;}
+.h10{ height:10px; overflow:hidden; clear:both; font-size:0;}
+/*******public class*********/
+.fl{ float:left;} .fr{ float:right;} .fb{ font-weight:bold;} .tr{ text-align:right;}.dis{display:block;}.mr10{margin-right:10px}.pd10{padding:0 10px;}
+.h10{height:10px;font-size:0;overflow:hidden;clear:both;}
+body{ background:#fff}
+.tipCen{width:800px; overflow:hidden;_zoom:1; margin:0 auto; background:#000;}
+.tipCma{width:440px; height:240px; background:#fff; overflow:hidden; margin:0 auto;}
+.cmaLe{width:100px; border-right:1px solid #e3e3e3; float:left; height:180px; padding-top:20px; margin-right:20px;}
+.cmaLe a{width:80px; display: block; height:25px; padding-left:20px; overflow:hidden; font:14px/25px "微软雅黑"; color:#333;}
+.cmaLe a.hov{ background:#d9efff;}
+.cmaLe a.act{ background:#46b4e6; color:#fff;}
+.cmaRi{width:310px; float:left; height:180px; padding-top:20px; overflow:hidden;}
+.cmRit{ height:15px; overflow:hidden;_zoom:1; margin-bottom:10px;}
+.ria{width:15px; height:15px; float:left; margin-right:5px;}
+.rib{width:280px; height:15px; float:left; font:12px/15px "微软雅黑"; color:#666;}
+.cmBtn{ height:32px; overflow:hidden;_zoom:1; margin-top:5px;}
+.back{width:68px; height:28px; border:1px solid #999; overflow:hidden; background:#fff; font:12px/28px "微软雅黑"; color:#333; text-align:center; float:right; margin-right:10px;}
+.back:hover{background:#d9efff;border:1px solid #029ee5; color:#029ee5;}
+.cmUp{height:200px; overflow:hidden;_zoom:1;}
+.ok{width:68px; height:28px; border:1px solid #029ee5; overflow:hidden; background:#46b4e6; font:12px/28px "微软雅黑"; color:#fff; text-align:center; float:right; margin-right:10px;}
+.ok:hover{border:1px solid #029ee5;background:#46ccff;}
+.tipCmb{width:412px; height:149px; overflow:hidden;_zoom:1; background:#fff; margin:0 auto;}
+.tipCmb a{width:98px; height:70px; overflow:hidden; float:left; background:#fff; margin:0 1px 1px 0;border:2px solid #dddddd; color:#b3b3b3; }
+.tipCmb a.ass{width:98px; height:70px; border:2px solid #46b4e6;}
+.tipCmb a.amm{width:98px; height:70px; border:2px solid #9ee1ff;}
+.tipCmb a.akk{font:12px/20px "微软雅黑"; color:#b3b3b3; text-align:center; padding-top:15px; height:55rpx;}
+.riTex{width:310px; float:left; height:180px; padding-top:20px; overflow:hidden;color:#666; font:12px/14px "微软雅黑";}
+.tsCov{width:270px; height:145px; overflow:hidden; margin:0 auto; background:#fff;}
+.tsTit{ height:22px;font:20px/22px "微软雅黑"; color:#000;}
+.tsTit span{ height:22px;font:18px/22px "微软雅黑"; color:#ff0000; margin-left:60px;}
+.tsTex{ height:80px;font:14px/80px "微软雅黑"; color:#333; padding-left:5px;}
+.conTrom{width:625px; overflow:hidden;_zoom:1; background:#fff; margin:0 auto;}
+.conTa{ height:35px; overflow:hidden;_zoom:1; margin:20px 0 0 0;}
+.conLa{width:35px; height:35px; float:left; background:#808080; margin-right:10px;}
+.conLb{width:380px; height:20px; font:16px/18px "微软雅黑"; color:#333; overflow:hidden; float:left; }
+.conLc,.conLd{width:90px; height:20px; font:14px/20px "微软雅黑"; color:#333; overflow:hidden; text-align:center;float:left;}
+
+.conTb{width:700px; overflow:hidden;_zoom:1;border-bottom:1px solid #cdcccc;padding-bottom:20px;}
+.tbList{width:165px; height:20px; float:left; overflow:hidden;_zoom:1; margin:20px 45px 0 0;}
+.tbList a{width:12px; height:11px; float:left; margin:5px 5px 0 0;}
+.tbList em{width:12px; height:11px; float:left; margin:5px 5px 0 0;}
+
+.tnTex{width:145px; height:20px; font:12px/20px "微软雅黑"; color:#46b4e6; overflow:hidden; float:left;}
+.tnTey{width:145px; height:20px; font:12px/20px "微软雅黑"; color:#000; overflow:hidden; float:left;}
+.conHr{ border-top:1px solid #46b4e6; padding-top:10px; overflow:hidden;_zoom:1;}
+.mysha{width:370px; height:304px; overflow:hidden; margin:0 auto; background:#fff; padding-top:20px;}
+.sha{ height:16px; font:14px/16px "微软雅黑"; color:#333;}
+.shList{width:400px; height:140px; overflow:hidden;_zoom:1;}
+.shBox{width:110px; height:20px; overflow:hidden;_zoom:1; float:left; margin:0 10px 20px 0;}
+.sbAm{width:15px; height:15px; float:left; margin:3px 4px 0 0;}
+.sbTex{width:90px; height:20px; float:left; font:14px/20px "微软雅黑"; color:#333; overflow:hidden;}
+.back2{width:68px; height:28px; cursor:pointer; border:1px solid #999; overflow:hidden; background:#fff; font:14px/28px "微软雅黑"; color:#333; text-align:center; float:left; margin-right:2px;}
+.back2:hover{background:#d9efff; cursor:pointer; border:1px solid #029ee5; color:#029ee5;}
+.cmBtn2{ height:32px; overflow:hidden;_zoom:1; margin-top:5px; padding-right:5px;}
+
+
+
+.tipOne{ height:40px; overflow:hidden;_zoom:1; padding:0 10px;}
+.tipOne span{ height:40px; float:left; font:20px/55px "微软雅黑"; color:#46b4e6;}
+.tipOne a{width:12px; height:11px; font-size:0; float:right; margin:10px 0 0 0;}
+.adNt{ height:26px; font:14px/26px "微软雅黑"; color:#46b4e6; margin-bottom:5px;}
+.adNRi{width:310px; float:left;overflow:hidden;_zoom:1;}
+.gameInpt{ height:22px; overflow:hidden;_zoom:1; margin-bottom:5px;}
+.gameSva{width:70px; height:20px; overflow:hidden; float:left;font:14px/20px "微软雅黑";color:#46b4e6; margin-right:5px;}
+.gameSvb{width:65px; height:20px; overflow:hidden; float:left;font:12px/20px "微软雅黑";color:#333; margin-right:5px; text-align:right;}
+.inpt{width:100px; height:18px; border:1px solid #95b4c3; overflow:hidden; font:12px/18px "微软雅黑"; color:#000; float:left; padding:0 2px;}
+.radioCtr{width:141px; height:151px; border:1px solid #cacaca; overflow:hidden; background:#fff; padding:0 1px; margin:0 auto;}
+.radIma{ height:37px; border-bottom:1px solid #dddcdb; font:14px/37px "微软雅黑"; color:#333; padding-left:27px;}
+.raDb,.raDa{width:112px; height:35px; overflow:hidden;_zoom:1; position:relative;font:14px/35px "微软雅黑"; color:#333;padding-left:27px; display:block;}
+.raDa{color:#fff; background:#46b4e6;}
+.flashOk{width:14px; height:14px; position:absolute; top:12px;_top:10px; left:8px;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

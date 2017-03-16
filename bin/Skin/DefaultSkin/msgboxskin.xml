@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Window size="310,135" caption="0,0,0,50" roundcorner="3,3">
+<Font name="微软雅黑" size="12" default="true" />
+<Font name="微软雅黑" size="20" bold="true" />
+
+<SkinVerticalLayout maskimg="file='popwnd_mask.png' source='0,0,11,64' corner='5,60,5,3' " >
+    <HorizontalLayout height="50">
+        <Label name="label_title" text="酷我提示" textpadding="18,13,0,0" textcolor="#ff000000" mouse="false" font="1"/>
+        <Control />
+        <HorizontalLayout width="23" height="23" inset="0,10,10,0" >
+            <Button name="btn_close" width="13" height="13" normalimage="file='tab_btn_close_select.png' source='0,0,13,13'" hotimage="file='tab_btn_close_select.png' source='13,0,26,13'" pushedimage="file='tab_btn_close_select.png' source='26,0,39,13'" />
+        </HorizontalLayout>
+    </HorizontalLayout>
+    <VerticalLayout inset="8,8,8,0" name="ClientRect">
+        <HorizontalLayout name="MsgBox_Content" inset="0,0,0,0">
+            <Text name="text_msg" width="250" maxheight="120" padding="10,0,0,0" />
+        </HorizontalLayout>
+        <!-- <Control height="2" enabled="false" mouse="false"/> -->
+        <HorizontalLayout name="buttonrow" height="35" userdata="mainbtn.png" padding="0,5,0,0" >
+            <Button setcursor="true" name="btn_link" align="left" textcolor="#FF46B4E6" />
+            <CheckBox name="checkbox_donotShowAgain" text="不再提示" padding="0,4,0,0" visible="false"
+                    setcursor="true" height="17" width="70" checkinfo="dest='0,0,16,17'" statusimage="Config_CheckBox.png" />
+            <Control enabled="false" mouse="false" />
+        </HorizontalLayout>
+    </VerticalLayout>
+    <Control height="5" />
+</SkinVerticalLayout>
+</Window>

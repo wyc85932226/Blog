@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Window size="310,135" caption="0,0,0,50" >
+<Font name="微软雅黑" size="12" bold="true" default="true" />
+<Font name="微软雅黑" size="22" bold="true" />
+
+<VerticalLayout bkcolor="#ffffffff">
+    <WebBrowser name="html_main" />
+</VerticalLayout>
+</Window>

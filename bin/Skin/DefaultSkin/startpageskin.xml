@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window roundcorner="3,3" size="1020,715">
+    <VerticalLayout name="layout_bk" bkimage="startpage.jpg" bkmodify="source='0,0,985,680'" />
+</Window>

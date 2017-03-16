@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="GBK"?> 
+<root>
+  <mod name="KwModHotKey.dll"   		type="data" start="0"/>
+  <mod name="UIUpdateDialog.dll"        type="UI" start="0"/>  
+  <mod name="UIPopupDialog.dll"        type="UI" start="0"/>
+  <mod name="UISkinManager.dll"        type="UI" start="0"/>
+</root>

@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>gift_card</title>
+<link href="css/game.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript">
+//解析参数
+function hooyesQueryString(queryStringName){
+	var returnValue=""; 
+	var URLString=new String(document.location);
+	//URLString=URLString.toLowerCase();//转换为小写
+	var serachLocation=-1; 
+	var queryStringLength=queryStringName.length; 
+	do { 
+			serachLocation=URLString.indexOf(queryStringName+"\="); 
+			if (serachLocation!=-1) {
+				if ((URLString.charAt(serachLocation-1)=='?') || (URLString.charAt(serachLocation-1)=='&')) {
+					URLString=URLString.substr(serachLocation);
+					break; 
+				} 
+				URLString=URLString.substr(serachLocation+queryStringLength+1); 
+			}  
+	} while (serachLocation!=-1) 
+	if (serachLocation!=-1) { 
+		var seperatorLocation=URLString.indexOf("&"); 
+		if (seperatorLocation==-1) { 
+		   returnValue=URLString.substr(queryStringLength+1); 
+		} else { 
+		   returnValue=URLString.substring(queryStringLength+1,seperatorLocation); 
+		}
+	  } 
+	return returnValue;
+}
+//复制到粘贴板上的代码
+function copyToClipboard(txt) {
+	if(window.clipboardData) {
+	   	//window.clipboardData.clearData();
+	  	return window.clipboardData.setData("Text", txt);
+	} else if(navigator.userAgent.indexOf('Opera') != -1) {
+		window.location = txt;
+		return true;
+	} else if (window.netscape) {
+		try {
+			netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');
+		} catch (e) {
+			alert("您的firefox安全限制限制您进行剪贴板操作，请打开’about:config’将signed.applets.codebase_principal_support’设置为true’之后重试");
+			return false;
+		}
+		var clip = Components.classes['@mozilla.org/widget/clipboard;1'].createInstance(Components.interfaces.nsIClipboard);
+		if (!clip)return false;
+		var trans = Components.classes['@mozilla.org/widget/transferable;1'].createInstance(Components.interfaces.nsITransferable);
+		if (!trans)return false;
+		trans.addDataFlavor('text/unicode');
+		var str = new Object();
+		var len = new Object();
+		var str = Components.classes['@mozilla.org/supports-string;1'].createInstance(Components.interfaces.nsISupportsString);
+		var copytext = txt;
+		str.data = copytext;
+		trans.setTransferData('text/unicode',str,copytext.length*2);
+		var clipid = Components.interfaces.nsIClipboard;
+		if (!clip)return false;
+		clip.setData(trans,null,clipid.kGlobalClipboard);
+		return true;
+	}
+}
+function docopy(txt){
+	if(copyToClipboard(txt)){
+		//$("#copy"+count).css("display","none");
+		//$("#copy"+count).next().css("display","block");
+		alert("复制成功");
+	}
+}
+$(document).ready(function (){
+	var cardStr = hooyesQueryString("cards");
+	var height = hooyesQueryString("height");
+	$(".twList").css("height",parseInt(height)-20);
+	if(cardStr.length>0){
+		var cards = cardStr.split("|");
+		var lists = "";
+		$.each(cards,function(idx){
+			lists+="<div class=\"sessTw\"><p>"+cards[idx]+"</p><a href=\"javascript:docopy('"+cards[idx]+"')\">复制</a></div>";
+		});
+		$(".twList").html(lists);
+	}
+	
+});
+</script>
+</head>
+<body>
+ 	<p class="h10"></p>
+	<div class="twList">
+	</div>
+	<p class="h10"></p>
+</body>
+</html>

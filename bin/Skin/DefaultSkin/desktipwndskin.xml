@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window roundcorner="3,3" size="222,126" >
+
+<Default name="Button" value="fadetime=&quot;300&quot;"/>
+
+<Font name="微软雅黑" size="12" bold="true" />
+<Font name="微软雅黑" size="12" default="true" />
+<Font name="微软雅黑" size="12" underline="true" />
+
+<ShapeVerticalLayout name="layout_container" inset="10,3,3,18" bkcolor="#88222222">
+    <!--标题栏-->
+    <HorizontalLayout height="15">
+        <Control />
+        <Button name="close" width="13" height="13" normalimage="file='btn_close_deskpop.png' source='0,0,13,13'" hotimage="file='btn_close_pop.png' source='13,0,26,13'" pushedimage="file='btn_close_deskpop.png' source='26,0,13,39'" />
+    </HorizontalLayout>
+
+    <!--内容区域-->
+    <HorizontalLayout>
+        <Button name="btn_gameimage" width="90" height="90" />
+        <VerticalLayout inset="10,0,15,0">
+            <VerticalLayout inset="0,0,0, 8" height="65">
+                <AutoSizeButton name="btn_gamename" maxheight="57" align="left,top" endellipsis="true" autoheight="true" hotfont="2" textcolor="#ffffffff" />
+                <Control />
+            </VerticalLayout>
+            <Button name="btn_entergame" width="84" height="27" textcolor="#ffeeeeee" font="0" text="开始游戏" normalimage="file='btn_entergame.png' source='0,0,84,27'" pushedimage="file='btn_entergame.png' source='84,0,168,27'" hotimage="file='btn_entergame.png' source='168,0,252,27'" />
+        </VerticalLayout>
+    </HorizontalLayout>
+    <!--WebBrowser name="html_mainpage" /-->
+</ShapeVerticalLayout>
+</Window>

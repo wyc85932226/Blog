@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link href="css/game.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript" src="js/common.js?1.js"></script>
+<script type="text/javascript" src="js/cookie.js"></script>
+</head>
+<body>
+<div class="logLe">
+                  <p class="h10"></p>
+                  <p class="h10"></p>
+                  <p class="inpBox">
+                        <em id="errormsg"></em>
+                        <span>帐&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;号：</span>
+                        <input type="text" class="inNc" id="userNameText">
+                        
+                  </p>
+                  <p class="h10"></p> 
+                  <p class="h10"></p>
+                  <p class="inpBox">
+                        <span>密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码：</span>
+                        <input type="password" class="inNc" id="passWordText">
+                  </p>
+                  <p class="h10"></p>
+                  <p class="h10"></p>
+                  <p class="zdSm">
+                        <input id="checkBox_autoLogin" type="checkbox" class="sma" checked="checked">
+                        <span class="smb">自动登录</span>
+                        <a class="smc" href="http://game.kuwo.cn/g/jsp/safeCenter/index.jsp" target="_blank">忘记密码</a>
+                  </p>
+                  <p class="h10"></p>
+                  <p class="h10"></p>
+                  <p class="zdBtn">
+                        <a class="logBtn" href="javascript:submitLogin()">立即登录</a>
+                        <a class="zcBtn" href="javascript:PageJump('Regist')">免费注册</a>
+                  </p>
+                  <p class="h10"></p>
+ 
+            
+            </div>
+</body>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#userNameText,#passWordText,#checkBox_autoLogin").keydown(function(event){
+			if(event.keyCode == 13){
+				submitLogin();
+			}
+		});
+	});
+	function submitLogin(){
+		var username = $("#userNameText").val();
+		var password = $("#passWordText").val();
+		if(username!="" && password !=""){
+			var number = Math.random();
+			number = number * 1000000000;
+			number = Math.ceil(number);
+			
+			username = encodeURIComponent(username);
+			password = encodeURIComponent(password);
+			
+			$(".logBtn").attr("href","javascript:").html("正在登录");
+			
+			$.getJSON('http://gamebox.kuwo.cn/NewKwGameBox/login?ver=v3.1&userName=' + username + '&passWord=' + password + '&randomNumber=' + number + '&callback=?',
+				function(result){
+					$(".logBtn").attr("href","javascript:submitLogin()").html("立即登录");
+					var obj = result;
+					if(typeof obj[0].userid!=undefined && obj[0].userid != null && obj[0].userid != 0 ){
+						password = decodeURIComponent(password);
+						//调用游戏盒登录
+	  					callGBoxLogin(result,password);
+					}else{
+						if(obj[0].errorInfo == "USER_NOT_EXIST"){
+							$("#errormsg").html("您输入的用户名不存在!");
+			  			}else if(obj[0].errorInfo == "PASSWORD_ERROR"){
+			  				$("#errormsg").html("您输入的密码错误,请重新输入!");
+			  			}else{
+			  				$("#errormsg").html("发生未知错误，请重试!");
+				  		}
+					}
+				}
+			);
+		}else{
+			if(username==""){
+				$("#errormsg").html("帐号不能为空！");
+			}else if(password==""){
+				$("#errormsg").html("密码不能为空！");
+			}
+		}
+	}
+	//调用游戏盒登录
+	function callGBoxLogin(result,passWord){
+  		try{
+ 			var obj = result;
+ 			var userid = obj[0].userid;
+ 			var username = obj[0].username;
+ 			var uph = obj[0].uph;
+ 			var t3 = null;
+			var uname3 = null;
+			var uhead3 = obj[0].userimg;
+			try {
+		 		t3 = obj[0].t3;
+	  			uname3 = obj[0].username3;  					
+			} catch(e) {}
+  	 		if($("#checkBox_autoLogin").attr("checked")){
+  	 			isAutoLoginChecked=true;
+  	 		}else{
+  	 			isAutoLoginChecked=false;
+  	 		}
+ 			//调用jianhen
+			//LobbyLogin_Web(username,passWord,userid,uph,isAutoLoginChecked, t3, uname3, uhead3);
+ 			var jsparam = '[{"uid":"' + userid + '","account":"' + username + '","uph":"' + uph + '","pwd":"' + passWord + '","thirdname":"' + uname3 + '","thirdtype":"' + t3 + '","thirdhead":"' + uhead3 + '","autologin":"' + isAutoLoginChecked + '"}]';
+			jsparam = window.external.CallKWGameBox("Base64/?encode="+jsparam);
+			window.external.CallKWGameBox("CallJScript/?webname=UserList&jsapi=callCommonLogin&jsparam="+jsparam);
+			//关闭窗体
+ 			closeForm();
+		}catch(error){}
+  	}
+</script>
+</html>

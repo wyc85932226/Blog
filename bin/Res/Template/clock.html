@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="css/base.css" />
+<script type="text/javascript" src="js/jquery-1.6.2.min.js"></script>
+<script type="text/javascript" src="js/cookie.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+<title>首页</title>
+<style>
+</style>
+<script type="text/javascript">
+	var uid="";
+	var uname="";
+	var uph="";
+	var gid="";
+	var sid="";
+	$(document).ready(function(){
+		var link = window.location.href;
+		if(link.indexOf("ext=")!=-1){
+			var begin=link.indexOf("ext=")+4;
+			var ext = link.substr(begin);
+			var exts = new Array();
+			exts = ext.split("-");
+			$("#uname").html(exts[0]);
+			$("#gameserver").html(exts[2]+exts[4]+"服");
+			$("#remark").html(exts[5]);
+			if(exts[7]==1){
+				$("#voice").html("<embed src=\"flash/alarm.mp3\" autostart=\"true\" ></embed>");
+			}
+			gid = exts[3];
+			sid = exts[4];
+			uid = exts[1];
+			uname = exts[0];
+			uph = exts[6];
+		}
+	});
+	function beginGame(){
+		//reqAndOpenGameByIdByClock(gid,sid,uid,uname,uph);
+		$.getJSON("http://gamebox.kuwo.cn/NewKwGameBox/getOpenGameInfoBy_B?path=byId&GID="+gid+"&SERVER_ID="+sid+"&jsoncallback=?",
+		 	function(result){
+	 			//开始游戏
+	 			//smallBeginGame("1",uname,uid,uph,result.TYPE,result.S_URL,result.NAME,result.GID,result.S_ID);
+	 			var tabText = result.NAME + " " + result.S_ID + "服";
+				//打开游戏
+				SmallOpenWeb('New',result.S_URL,tabText,tabText,tabText,result.TYPE,result.GID,result.S_ID,1,uname,uid,uph);
+					
+				//记录游戏历史(开始游戏)
+				if(uid != "" && result.S_ID!="0"){
+					reqPlayGame(uid,result.GID,result.S_ID,result.TYPE);
+				}	
+				//发送统计
+				var action = "openGame_" + result.GID + "_" + result.S_ID;
+				SendStat(action,"all");
+						
+				closeForm();		
+				
+	 		}
+		);
+		//closeForm();
+	}
+</script>
+</head>
+
+<body>
+	<div class="l_regist" style="width: 360px">
+		<div class="about_me">
+			<div class="about_dec">
+				<p>
+					尊敬的玩家：<span id="uname"></span>
+				</p>
+				<p>
+					您定时的游戏：<span style="color: #ff6600" id="gameserver"></span>
+				</p>
+				<p id="remark"></p>
+			</div>
+			<div class="registerblue" style="margin-top: 30px;">
+				<a href="javascript:beginGame()" class="blue_btn">进入游戏</a>
+			</div>
+			<div id="voice" style="display:none"></div>
+		</div>
+	</div>
+
+</body>
+</html>

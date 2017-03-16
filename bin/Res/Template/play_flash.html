@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+ <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ <title>ExternalInterfaceExample</title>
+<script type="text/javascript" src="http://js.kuwo.cn/jquery/jquery-1.6.2.min.js"></script>
+<script type="text/javascript" src="http://js.kuwo.cn/NewGameBox/cookie.js"></script>
+<script type="text/javascript" src="http://js.kuwo.cn/NewGameBox/js2014/common_b.js?1.js"></script>
+<script type="text/javascript">
+		document.domain="kuwo.cn";
+//根据浏览器可视的高度，设置加载游戏的iframe高度
+function resizeHeight(){
+       	var a1 = document,
+		h1 = a1.body,
+		b1 = a1.documentElement,
+		g1 = a1.compatMode == "BackCompat" ? h1: b1;
+		
+		var c1 = document.getElementById("gameiframe");
+		var defalutHeight = g1.clientHeight;
+		if(defalutHeight<622)
+           defalutHeight = 622;
+        c1.style.height = (defalutHeight)+"px";
+
+        if(g1.clientWidth<851)
+           c1.style.width = 851+"px";	
+        else
+           c1.style.width = "100%";
+          
+}
+//解析参数
+function hooyesQueryString(queryStringName){
+	var returnValue=""; 
+	var URLString=new String(document.location);
+	try {
+			URLString=new String(window.parent.gamesrc);
+	} catch (e) {
+		
+	}
+	
+	//alert(URLString);
+	//URLString=URLString.toLowerCase();//转换为小写
+	var serachLocation=-1; 
+	var queryStringLength=queryStringName.length; 
+	do { 
+			serachLocation=URLString.indexOf(queryStringName+"\="); 
+			if (serachLocation!=-1) {
+				if ((URLString.charAt(serachLocation-1)=='?') || (URLString.charAt(serachLocation-1)=='&')) {
+					URLString=URLString.substr(serachLocation);
+					break; 
+				} 
+				URLString=URLString.substr(serachLocation+queryStringLength+1); 
+			}  
+	} while (serachLocation!=-1) 
+	if (serachLocation!=-1) { 
+		var seperatorLocation=URLString.indexOf("&"); 
+		if (seperatorLocation==-1) { 
+		   returnValue=URLString.substr(queryStringLength+1); 
+		} else { 
+		   returnValue=URLString.substring(queryStringLength+1,seperatorLocation); 
+		}
+	  } 
+	  //alert(returnValue);
+	return returnValue;
+}
+</script>
+ </head>
+ <body style="background-color:#000000;padding: 0px;margin: 0px;" onresize="resizeHeight()">
+	<iframe id="gameiframe" width="851" height="622" scrolling="no" frameborder="0" src=""></iframe>
+  <script type="text/javascript">
+document.getElementById("gameiframe").src = hooyesQueryString("url");
+ window.onresize = function(){resizeHeight();}
+ resizeHeight();
+ </script>
+ </body>
+</html>

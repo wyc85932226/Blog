@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script type="text/javascript" src="js/jquery-1.6.2.min.js"></script>
+<title>游戏盒</title>
+<style type="text/css">
+body,h1,h2,h3,h4,h5,p,blockquote,dl,dt,dd,ul,ol,li,pre,form,fieldset,button,input,textarea,th,td,*
+	{
+	margin: 0;
+	padding: 0;
+}
+
+body,button,input,select,textarea {
+	font: 12px "微软雅黑", "微软雅黑", arial, sans-serif;
+}
+
+address,cite,dfn,em,var {
+	font-style: normal;
+}
+
+ul,ol {
+	list-style: none;
+}
+
+img {
+	border: 0;
+}
+
+.dis {
+	display: block;
+}
+
+a {
+	color: #b1a5a0;
+	text-decoration: none;
+}
+
+.h10 {
+	height: 10px;
+	overflow: hidden;
+	clear: both;
+	font-size: 0;
+}
+/*******public class*********/
+.fl {
+	float: left;
+}
+
+.fr {
+	float: right;
+}
+
+.fb {
+	font-weight: bold;
+}
+
+.tr {
+	text-align: right;
+}
+
+.dis {
+	display: block;
+}
+
+.mr10 {
+	margin-right: 10px
+}
+
+.pd10 {
+	padding: 0 10px;
+}
+
+.h10 {
+	height: 10px;
+	font-size: 0;
+	overflow: hidden;
+	clear: both;
+}
+
+body {
+	background: #313030;
+}
+
+.openDor1 {
+	width: 13px;
+	height: 43px;
+	float: right;
+	background: url(img/opena.gif);
+	margin: 300px 3px 0 0;
+}
+
+.openDor1:hover {
+	background: url(img/openb.gif)
+}
+
+.openDor1:active {
+	background: url(img/openc.gif)
+}
+
+.clsoeDor1 {
+	width: 13px;
+	height: 43px;
+	float: right;
+	background: url(img/closea.gif);
+	margin: 300px 3px 0 0;
+}
+
+.clsoeDor1:hover {
+	background: url(img/closeb.gif)
+}
+
+.clsoeDor1:active {
+	background: url(img/closec.gif)
+}
+</style>
+<script type="text/javascript">
+	function closeDiv() {
+		if ($("#aid").hasClass("openDor1")) {
+			$("#aid").removeClass("openDor1"); // Remove any "active" class
+			$("#aid").addClass("clsoeDor1"); // Add "active" class to selected tab
+		} else {
+			$("#aid").removeClass("clsoeDor1"); // Remove any "active" class
+			$("#aid").addClass("openDor1"); // Add "active" class to selected tab
+		}
+
+		top.window.changeIframe()
+
+	}
+</script>
+</head>
+
+<body>
+	<p
+		style="width: 100%; height: 35px; line-height: 35px; border-bottom: 1px solid #616161; background: #464646;"></p>
+	<a href="javascript:void(0);" onclick="closeDiv()" class="openDor1"
+		id="aid"></a>
+
+
+</body>
+</html>

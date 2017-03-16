@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<link href="css2/xf.css?555.css" type="text/css" rel="stylesheet" />
+		<title>自定义加速</title>
+		<style type="text/css">
+		.auto{visibility: hidden;}
+		</style>
+	</head>
+	<body>
+			<div class="chCbox">
+                 <p class="h10"></p>
+                 <p class="titc" style="padding-left: 10px;">输入要设定的加速值，如：10.5代表加速10.5倍</p>
+                 <p class="inpta" style="padding-left: 10px;"><input type="text" class="inta" onblur="checkspeed(this)" id="beilv"><span class="spanb">倍率</span></p>
+                 <p class="h10"></p>
+                 <p class="inptb" style="padding-left: 10px;"><input type="checkbox" class="intb" id="cleverspeed"><span class="spanc">智能加速</span></p>
+                 <p class="h10"></p>
+                 <p class="titd" style="padding-left: 10px;">
+                        某些页面游戏禁止变速，变速可能导致游戏掉线<br />
+                        等，建议您采用智能加速
+                 </p>
+                 <p class="inptd auto" id="auto" style="padding-left: 10px;">
+	                 <span class="spanb">加速</span>
+	                 <input type="text" id="start" onblur="check(this)" class="inta inft" value="5">
+	                 <span class="spanb">秒后，恢复原速</span>
+	                 <input type="text" id="stop" onblur="check(this)" class="inta infu" value="5">
+	                 <span class="spanb">秒</span>
+                 </p>
+                 <p class="h10"></p>
+                 <p class="h10"></p>
+                 <a href="javascript:submitSpeed()" class="btna" style="padding-left: 10px;">确定</a>
+            </div>
+	</body>
+	<script type="text/javascript" src="js/jquery-1.6.2.min.js"></script>
+	<script type="text/javascript" src="js/cookie.js"></script>
+	<script type="text/javascript">
+		var sysInif;
+		var beilv1="";
+		$(document).ready(function(){
+			try{
+				var str = window.external.CallKWGameBox("GameSpeed/?GetSpeed");
+				sysInif = eval(str);
+				beilv1 = ""+sysInif[0].beilv;
+				if(beilv1!=""){
+					if(beilv1.indexOf(".")==-1){
+						beilv1=beilv1+".0";
+					}
+					$("#beilv").val(beilv1);
+				}
+				if(sysInif[0].start!="0" && sysInif[0].start!="0"){
+					$("#cleverspeed").attr("checked","checked");
+					$("#auto").removeClass("auto");
+					$("#start").val(sysInif[0].start);
+					$("#stop").val(sysInif[0].stop);
+				}
+			}catch(err){}
+		});
+		
+		$("#cleverspeed").click(function(){
+			if($("#cleverspeed").attr("checked")=="checked"){
+				$("#auto").removeClass("auto");
+			}else{
+				$("#auto").addClass("auto");
+			}
+		});
+		function checkspeed(obj){
+			var num = obj.value;
+			if(num!=""){
+				if(num.indexOf(".")==-1){
+					num = num+".0";
+				}
+				var num_reg=/^(([1-9]{1}|[1-9]{1}[0-9]{1})\.[0-9]{1}|[1]{1}[0]{1}[0]{1}\.[0]{1})$/;
+				if(!num_reg.test(num)){
+					alert("加速倍率在1.0-100.0倍之间");
+					$("#beilv").val(beilv1);
+				}else{
+					$("#beilv").val(num);
+				}
+			}
+		}
+		function check(obj){
+			var num = obj.value;
+			if(num!=""){
+				var num_reg=/^([1-9]{1}|[1-9]{1}[0-9]{1}|[1]{1}[0]{1}[0]{1})$/;
+				if(!num_reg.test(num)){
+					alert("间隔时间在1s-100s之间");
+					obj.focus();
+				}
+			}else{
+				alert("间隔时间不能为空");
+				obj.focus();			
+			}
+		}
+		function submitSpeed(){
+			var num = $("#beilv").val();
+			if(num!=""){
+				if(num.indexOf(".")==-1){
+					num = num+".0";
+				}
+				var num_reg=/^(([1-9]{1}|[1-9]{1}[0-9]{1})\.[0-9]{1}|[1]{1}[0]{1}[0]{1}\.[0]{1})$/;
+				if(!num_reg.test(num)){
+					alert("加速倍率在1.0-100.0倍之间");
+					$("#beilv").val("1.0");
+				}else{
+					//添加智能加速部分
+					try{
+						if($("#cleverspeed").attr("checked")=="checked"){
+							var start = $("#start").val();
+							var stop = $("#stop").val();
+							var num_reg1=/^([1-9]{1}|[1-9]{1}[0-9]{1}|[1]{1}[0]{1}[0]{1})$/;
+							if(start!=null && stop!=null && num_reg1.test(start) && num_reg1.test(stop)){
+								//智能加速成功
+								window.external.CallKWGameBox("GameSpeed/?beilv="+num+"&start="+start+"&stop="+stop);
+							}else{
+								window.external.CallKWGameBox("GameSpeed/?beilv="+num+"&start=0&stop=0");
+							}
+						}else{
+							window.external.CallKWGameBox("GameSpeed/?beilv="+num+"&start=0&stop=0");
+						}
+						window.external.CallKWGameBox("POPDLGCLOS");
+					}catch(err){}
+					
+				}
+			}
+			
+		}
+	</script>
+</html>
+
+
+

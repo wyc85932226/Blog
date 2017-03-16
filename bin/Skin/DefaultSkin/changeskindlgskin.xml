@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Window caption="0,0,0,40" roundcorner="3,3" size="465,312">
+    <Font name="微软雅黑" size="20" bold="true" default="true" />
+
+  <Default name="VScrollBar" value="buttonlength=&quot;15&quot; width=&quot;12&quot; autohide=&quot;false&quot; button1normalimage=&quot;file='scrollbar_public_v.png' source='0,0,12,15'&quot; button1hotimage=&quot;file='scrollbar_public_v.png' source='13,0,25,15'&quot; button1pushedimage=&quot;file='scrollbar_public_v.png' source='26,0,38,15'&quot; button1disabledimage=&quot;file='scrollbar_public_v.png' source='39,0,41,15'&quot; button2normalimage=&quot;file='scrollbar_public_v.png' source='0,16,12,31'&quot; button2hotimage=&quot;file='scrollbar_public_v.png' source='13,16,25,31'&quot; button2pushedimage=&quot;file='scrollbar_public_v.png' source='26,16,38,31'&quot; button2disabledimage=&quot;file='scrollbar_public_v.png' source='41,16,53,31'&quot; thumbnormalimage=&quot;scrollbar_public_thumb_v_1.png&quot; thumbhotimage=&quot;scrollbar_public_thumb_v_2.png&quot; thumbpushedimage=&quot;scrollbar_public_thumb_v_3.png&quot; thumbdisabledimage=&quot;scrollbar_public_thumb_v_4.png&quot; bknormalimage=&quot;file='scrollbar_public_v.png' source='0,32,12,33'&quot; bkhotimage=&quot;file='scrollbar_public_v.png' source='13,32,25,33'&quot; bkpushedimage=&quot;file='scrollbar_public_v.png' source='26,32,38,33'&quot; bkdisabledimage=&quot;file='scrollbar_public_v.png' source=39,32,51,33'&quot;" />
+  <SkinVerticalLayout name="layout_main" maskimg="file='popwnd_mask.png' source='0,0,11,64' corner='5,60,5,3' " inset="10,1,1,10">
+    <!--title 区-->
+    <HorizontalLayout name="layout_title" inset="0,10,10,0" height="40" >
+        <Label name="label_title" text="更换皮肤" width="250" height="30" font="0" textcolor="#ff000000" />
+        <Control />
+        <Button name="btn_close" width="13" height="13" padding="10,0,0,0" normalimage="file='tab_btn_close_select.png' source='0,0,13,13'" hotimage="file='tab_btn_close_select.png' source='13,0,26,13'" pushedimage="file='tab_btn_close_select.png' source='26,0,39,13'" />
+    </HorizontalLayout>
+
+    <Control bkcolor="#ffececec" float="true" pos="0,79,490,80"/>
+    <VerticalLayout  name="layout_localskin" bkcolor="#00000000" height="142" vscrollbar="true" hscrollbar="false" />
+  </SkinVerticalLayout>
+</Window>

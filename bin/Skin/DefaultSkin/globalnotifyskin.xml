@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Window >
+<!--字体的顺序不要变，程序里边用index设置字体-->
+<Font name="微软雅黑" size="12" bold="true" default="true" />
+<Font name="微软雅黑" size="12" bold="true" underline="true" />
+
+<HorizontalLayout name="layout_container" bkcolor="#ffffffff" bordersize="1" bordercolor="0xd0dddddd">
+    <HorizontalLayout width="470">
+        <HorizontalLayout name="layout_notify" width="470" height="20" float="true">
+        </HorizontalLayout>
+    </HorizontalLayout>
+
+    <Button name="btn_notify_close" width="20" height="17" padding="10,0,0,0" normalimage="file='btn_close.png' source='0,0,20,17'" hotimage="file='btn_close.png' source='20,0,40,17'" pushedimage="file='btn_close.png' source='40,0,60,17'" />
+</HorizontalLayout>
+</Window>

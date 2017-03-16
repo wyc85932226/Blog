@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Install</title>
+<link href="css/tips.css" rel="stylesheet" type="text/css" />
+<script src="js/jquery-1.6.2.min.js" type="text/javascript"></script>
+<script src="js/jquery-ui.js" type="text/javascript"></script>
+<script src="js/common.js" type="text/javascript"></script>
+<script type="text/javascript" src="js/cookie.js"></script>
+<script type="text/javascript">
+var sorted = new Array();
+$(document).ready(function(){
+	
+	//初始化
+	init();
+	
+	$(".sbAm").change(function(){
+		if($(this).attr("checked")=="checked"){
+			if($("input:checked").length>5){
+				$(this).removeAttr("checked");
+				alert("最多选中5个按钮");
+			}else{
+				$(".cmBtn2").append("<li id=\"li"+$(this).attr("id")+"\" class=\"back2\" title=\""+$(this).attr("title")+"\">"+$(this).next(".sbTex").text()+"</li>");
+			}
+		}else{
+			$("#li"+$(this).attr("id")).remove();
+		}
+	});
+	$("#sortable").sortable({containment:'window'});
+	$("#sortable").disableSelection();
+});
+function init(){
+	//var data = "[{'menu':'btn_speed','state':'1','index':'1'},{'menu':'btn_subaccount','state':'0'},{'menu':'btn_fullscreen','state':'1','index':'0'},{'menu':'btn_repair','state':'0'}]";
+	var data = window.external.CallKWGameBox("BtnSort/?type=get");
+	data = window.external.CallKWGameBox("Base64/?decode=" + data);
+	var inputList = "";
+	var btnList = "";
+	var jsonStr = eval(data);
+	$.each(jsonStr,function(idx){
+		var menu = jsonStr[idx].menu;
+		var name = jsonStr[idx].name;
+		var state = jsonStr[idx].state;
+		inputList+="<p class=\"shBox\"><input id=\""+idx+"\" type=\"checkbox\" class=\"sbAm\" title=\""+menu+"\"";
+		if(state=="1"){
+			inputList+="checked=\"checked\"";
+			//已排序的按钮按顺序显示
+			var index = jsonStr[idx].index;
+			sorted[index] = "<li id=\"li"+idx+"\" class=\"back2\" title=\""+menu+"\">"+name+"</li>";
+		}
+		inputList+="><span class=\"sbTex\">"+name+"</span></p>";
+	})
+	$(".shList").html(inputList);
+	
+	//已排序的按钮按顺序显示
+	$.each(sorted,function(idx){
+		btnList+=sorted[idx];
+	});
+	$(".cmBtn2").html(btnList);
+}
+function save(){
+	var btn = "";
+	if($("#sortable").children("li").length>0){
+		$.each($("#sortable").children("li"),function(idx){
+			btn+=$(this).attr("title")+",";
+		});
+		btn = btn.substr(0,btn.length-1);
+	}
+	var menu = "";
+	$.each($("input"),function(idx){
+		if($(this).attr("checked")!="checked"){
+			menu+=$(this).attr("title")+",";
+		}
+	});
+	menu = menu.substr(0,menu.length-1);
+	//BtnSort/ ?type=set&sort=
+	//json格式：两个值：btn,menu
+	window.external.CallKWGameBox("BtnSort/?type=set&btn="+btn+"&menu="+menu);
+	closeForm();
+}
+</script>
+</head>
+<body>
+<p class="h10"></p>
+      <div class="mysha">
+            <p class="sha">先勾选最常用五个功能：<p>
+            <p class="h10"></p>
+            <div class="shList">
+
+            </div>
+            <p class="h10"></p>
+            <p class="h10"></p>
+            <p class="sha">再拖动变化位置：<p>
+            <p class="h10"></p>
+            <ul class="cmBtn2" id="sortable">
+
+            </ul>
+            <p class="h10"></p>
+            <p class="cmBtn"><a href="javascript:" onclick="save()" class="ok">保存</a><a href="javascript:" onclick="closeForm()" class="back">取消</a></p>
+      </div>
+      <p class="h10"></p>
+</body>
+</html>

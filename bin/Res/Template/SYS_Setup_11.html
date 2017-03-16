@@ -1,0 +1,315 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<script>
+	window.onerror = function() {
+		return true;
+	}
+</script>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="css/base.css" type="text/css" rel="stylesheet" />
+<link href="css/tips.css?123.css" rel="stylesheet" type="text/css" />
+<script src="js/jquery-1.6.2.min.js"></script>
+<script src="js/cookie.js"></script>
+<title>系统设置</title>
+</head>
+<script>
+	//可用快捷键数组
+	var keycode1=[65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,9];
+	var keyvalue1=['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','Tab'];
+	var keycode2=[112,113,114,115,116,117,118,119,120,121,122,123];
+	var keyvalue2=['F1','F2','F3','F4','F5','F6','F7','F8','F9','F10','F11','F12'];
+	
+	var sysInif;
+	
+	var txtvalue;
+	//keycode   16 = Shift_L
+	//keycode   17 = Control_L
+	//keycode   18 = Alt_L
+	function GetKeyValue1(code){
+		for(var i=0;i<keycode1.length;i++){
+			if(keycode1[i]==code){
+				return keyvalue1[i];
+			}
+		}
+	}
+	function GetKeyValue2(code){
+		for(var i=0;i<keycode2.length;i++){
+			if(keycode2[i]==code){
+				return keyvalue2[i];
+			}
+		}
+	}
+	//快捷键设置方法
+	function IKeyDown(event,obj){
+		var kc = event.keyCode;
+		
+		if(event.ctrlKey && event.altKey && event.shiftKey){
+			if(kc>=65 && kc<=90 || kc==9){
+				txtvalue=txtvalue+GetKeyValue1(kc);
+			}else{
+				if(txtvalue=="Ctrl+Alt+" || txtvalue=="Alt+Ctrl+"){
+					txtvalue+="Shift+";
+				}else if(txtvalue=="Ctrl+Shift+" || txtvalue=="Shift+Ctrl+"){
+					txtvalue+="Alt+";
+				}else if(txtvalue=="Alt+Shift+" || txtvalue=="Shift+Alt+"){
+					txtvalue+="Ctrl+";
+				}
+			}
+			$(obj).val(txtvalue);
+		}else if(event.ctrlKey && event.altKey){
+			if(kc>=65 && kc<=90 || kc==9){
+				txtvalue=txtvalue+GetKeyValue1(kc);
+			}else{
+				if(txtvalue=="Ctrl+"){
+					txtvalue+="Alt+";
+				}else if(txtvalue=="Alt+"){
+					txtvalue+="Ctrl+";
+				}
+			}
+			$(obj).val(txtvalue);
+		}else if(event.ctrlKey && event.shiftKey){
+			if(kc>=65 && kc<=90 || kc==9){
+				txtvalue=txtvalue+GetKeyValue1(kc);
+			}else{
+				if(txtvalue=="Ctrl+"){
+					txtvalue+="Shift+";
+				}else if(txtvalue=="Shift+"){
+					txtvalue+="Ctrl+";
+				}
+			}
+			$(obj).val(txtvalue);
+		}else if(event.altKey && event.shiftKey){
+			if(kc>=65 && kc<=90 || kc==9){
+				txtvalue=txtvalue+GetKeyValue1(kc);
+			}else{
+				if(txtvalue=="Alt+"){
+					txtvalue+="Shift+";
+				}else if(txtvalue=="Shift+"){
+					txtvalue+="Alt+";
+				}
+			}
+			$(obj).val(txtvalue);
+		}else if(event.ctrlKey){
+			if(kc>=65 && kc<=90 || kc==9){
+				txtvalue="Ctrl+"+GetKeyValue1(kc);
+			}else{
+				txtvalue="Ctrl+";
+			}
+			$(obj).val(txtvalue);
+		}else if(event.shiftKey){
+			if(kc>=65 && kc<=90 || kc==9){
+				txtvalue="Shift+"+GetKeyValue1(kc);
+			}else{
+				txtvalue="Shift+";
+			}
+			$(obj).val(txtvalue);
+		}else if(event.altKey){
+			if(kc>=65 && kc<=90 || kc==9){
+				txtvalue="Alt+"+GetKeyValue1(kc);
+			}else{
+				txtvalue="Alt+";
+			}
+			$(obj).val(txtvalue);
+		}else if(kc>=112 && kc<=123 || kc==9){ 
+			txtvalue=GetKeyValue2(kc);
+			$(obj).val(txtvalue);
+		}else{
+			if(event.keyCode==8){
+				txtvalue="";
+				$(obj).val(txtvalue);
+			}
+		}
+		event.keyCode = 0;
+		event.returnValue=false;
+		return false;
+	}
+	function IKeyUp(event,obj){
+		var v = $(obj).val();
+		//格式验证
+		var keyExp = /^[a-zA-Z\+]+\+$/;
+		if(keyExp.test(v)){
+			txtvalue="";
+			$(obj).val(txtvalue);
+		}
+		//快捷键不能重复
+		if(v!=""){
+			$.each($(obj).parent().siblings("p").find("input"),function(idx){
+				if($(this).val()==v){
+					txtvalue="";
+					$(obj).val(txtvalue);
+				}
+			});
+		}
+	}
+	
+	$(document).ready(function() {
+		initPage();
+		loadData();
+	});
+	//初始化方法
+	function initPage(){
+		$(".cmaLe").find("a").mouseover(function(){
+			$(this).addClass("act").siblings().removeClass();
+			$(".cmaLe").nextAll("div:eq("+$(this).index()+")").css("display","block").
+				siblings("div").css("display","none");
+		});
+		
+	}
+	//加载数据方法
+	function loadData(){
+		var str = window.external.CallKWGameBox("GameBox/?GetSetting");
+		//var str="[{\"autorun\":false,\"recovergame\":true,\"directexit\":false,\"mute\":\"3\",\"hotkey\":{\"SysMin\":\"Alt+R\",\"AppRefresh\":\"F5\", \"AppGameSpeed\":\"Ctrl+F\", \"AppSubAccount\":\"Ctrl+D\", \"AppRightTab\":\"Ctrl+Tab\",\"AppFullScreen\":\"F11\", \"AppScreenCapture\":\"Alt+C\"}}]";
+		sysInif = eval(str);
+		if(sysInif[0].autorun == true){
+			$("#autorun").attr("checked","checked");
+		}else{
+			$("#autorun").removeAttr("checked");;
+		}
+		if(sysInif[0].recovergame == true){
+			$("#recovergame").attr("checked","checked");
+		}else{
+			$("#recovergame").removeAttr("checked");;
+		}
+		if(sysInif[0].directexit == true){
+			$("#directexit1").attr("checked","checked");
+		}else{
+			$("#directexit0").attr("checked","checked");
+		}
+		if(sysInif[0].mute==0){
+			$("#mute0").attr("checked","checked");
+		}else if(sysInif[0].mute==1){
+			$("#mute1").attr("checked","checked");
+		}else if(sysInif[0].mute==2){
+			$("#mute2").attr("checked","checked");
+		}else if(sysInif[0].mute==3){
+			$("#mute3").attr("checked","checked");
+		}
+		//快捷键
+		var hotkey = sysInif[0].hotkey;
+		$("#SysMin").val(hotkey.SysMin);
+		$("#AppRefresh").val(hotkey.AppRefresh);
+		$("#AppGameSpeed").val(hotkey.AppGameSpeed);
+		$("#AppSubAccount").val(hotkey.AppSubAccount);
+		$("#AppRightTab").val(hotkey.AppRightTab);
+		$("#AppFullScreen").val(hotkey.AppFullScreen);
+		$("#AppScreenCapture").val(hotkey.AppScreenCapture);
+		
+		
+		//初始化 版本号
+		$("#content").html(hooyesQueryString("version"));
+	}
+	
+	//确定
+	function okFun(){
+		//var str="[{\"autorun\":false,\"recovergame\":true,\"directexit\":false,\"mute\":\"3\",
+		//\"hotkey\":{\"SysMin\":\"Alt+R\",\"AppRefresh\":\"F5\", \"AppGameSpeed\":\"Ctrl+F\", 
+		//\"AppSubAccount\":\"Ctrl+D\", \"AppRightTab\":\"Ctrl+Tab\",\"AppFullScreen\":\"F11\", \"AppScreenCapture\":\"Alt+C\"}}]";
+		var autorun = false;
+		var recovergame = false;
+		var directexit = false;
+		var mute = 0;
+		if($("#autorun").attr("checked")=="checked"){
+			autorun = true;
+		}
+		if($("#recovergame").attr("checked")=="checked"){
+			recovergame = true;
+		}
+		if($("#directexit1").attr("checked")=="checked"){
+			directexit = true;
+		}
+		if($("#mute0").attr("checked")=="checked"){
+			mute = 0;
+		}else if($("#mute1").attr("checked")=="checked"){
+			mute = 1;
+		}else if($("#mute2").attr("checked")=="checked"){
+			mute = 2;
+		}else if($("#mute3").attr("checked")=="checked"){
+			mute = 3;
+		}
+		var strData="GameBox/?SetupSetting=ok&autorun="+ autorun + "&recovergame=" + recovergame + "&directexit="+ directexit +
+				"&mute=" + mute +"&hotkey=SysMin:"+$("#SysMin").val()+",AppRefresh:"+$("#AppRefresh").val()+
+				",AppGameSpeed:"+$("#AppGameSpeed").val()+",AppSubAccount:"+$("#AppSubAccount").val()+",AppRightTab:"+$("#AppRightTab").val()+
+				",AppFullScreen:"+$("#AppFullScreen").val()+",AppScreenCapture:"+$("#AppScreenCapture").val();
+		window.external.CallKWGameBox(strData);
+	}
+	//解析参数
+	function hooyesQueryString(queryStringName){
+		var returnValue=""; 
+		var URLString=new String(document.location);
+		//URLString=URLString.toLowerCase();//转换为小写
+		var serachLocation=-1; 
+		var queryStringLength=queryStringName.length; 
+		do { serachLocation=URLString.indexOf(queryStringName+"\="); 
+		if (serachLocation!=-1) {
+		if ((URLString.charAt(serachLocation-1)=='?') || (URLString.charAt(serachLocation-1)=='&')) {
+			URLString=URLString.substr(serachLocation);
+			break; 
+		} URLString=URLString.substr(serachLocation+queryStringLength+1); 
+		}  
+		} while (serachLocation!=-1) if (serachLocation!=-1) { 
+		var seperatorLocation=URLString.indexOf("&"); 
+		if (seperatorLocation==-1) { 
+		   returnValue=URLString.substr(queryStringLength+1); 
+		} else { 
+		   returnValue=URLString.substring(queryStringLength+1,seperatorLocation); 
+		}
+		  } 
+		return returnValue;
+	}
+	
+</script>
+<body>
+	      <div class="tipCma">
+            <div class="cmUp">
+                  <p class="cmaLe">
+                        <a href="#" class="act">设置</a>
+                        <a href="#">声音</a>
+                        <a href="#">快捷键</a>
+                        <a href="#">关于</a>
+                  </p>
+                  <div class="cmaRi">
+                        <p class="adNt">启动：</p>
+                        <p class="cmRit"><input type="checkbox" id="autorun" class="ria"><span class="rib">开机启动</span></p>
+                        <p class="cmRit"><input type="checkbox" id="recovergame" class="ria"><span class="rib">启动时，自动打开上次未关闭的游戏</span></p>
+                        
+                        <p class="adNt">退出：</p>
+                        <p class="cmRit"><input type="radio" id="directexit0" name="exit" class="ria"><span class="rib">最小化到托盘</span></p>
+                        <p class="cmRit"><input type="radio" id="directexit1" name="exit" class="ria"><span class="rib">直接退出游戏</span></p>
+                  </div>
+                  <div class="cmaRi">
+                        <p class="adNt">声音控制：</p>
+                        <p class="cmRit"><input type="radio" id="mute0" name="voice" class="ria"><span class="rib">开启声音</span></p>
+                        <p class="cmRit"><input type="radio" id="mute3" name="voice" class="ria"><span class="rib">全局静音</span></p>
+                        <p class="cmRit"><input type="radio" id="mute2" name="voice" class="ria"><span class="rib">关闭游戏声音</span></p>
+                        <p class="cmRit"><input type="radio" id="mute1" name="voice" class="ria"><span class="rib">关闭音乐声音</span></p>
+                        
+                  </div>
+                  <div class="adNRi">
+                        <p class="gameInpt"><span class="gameSva">游戏设置：</span><span class="gameSvb">刷新：</span><input type="text" id="AppRefresh" class="inpt" onkeydown="IKeyDown(event,this)" onkeyup="IKeyUp(event,this)" onblur="IKeyUp(event,this)"></p>
+                        <p class="gameInpt"><span class="gameSva"></span><span class="gameSvb">游戏加速：</span><input type="text" id="AppGameSpeed" class="inpt" onkeydown="IKeyDown(event,this)" onkeyup="IKeyUp(event,this)" onblur="IKeyUp(event,this)"></p>
+                        <p class="gameInpt"><span class="gameSva"></span><span class="gameSvb">小号列表：</span><input type="text" id="AppSubAccount" class="inpt" onkeydown="IKeyDown(event,this)" onkeyup="IKeyUp(event,this)" onblur="IKeyUp(event,this)"></p>
+                        <p class="h10"></p>
+                        <p class="gameInpt"><span class="gameSva">窗口设置：</span><span class="gameSvb">切换标签：</span><input type="text" id="AppRightTab" class="inpt" onkeydown="IKeyDown(event,this)" onkeyup="IKeyUp(event,this)" onblur="IKeyUp(event,this)"></p>
+                        <p class="gameInpt"><span class="gameSva"></span><span class="gameSvb">老板键：</span><input type="text" id="SysMin" class="inpt" onkeydown="IKeyDown(event,this)" onkeyup="IKeyUp(event,this)" onblur="IKeyUp(event,this)"></p>
+                        <p class="gameInpt"><span class="gameSva"></span><span class="gameSvb">全屏：</span><input type="text" id="AppFullScreen" class="inpt" onkeydown="IKeyDown(event,this)" onkeyup="IKeyUp(event,this)" onblur="IKeyUp(event,this)"></p>
+                        <p class="gameInpt"><span class="gameSva"></span><span class="gameSvb">截图：</span><input type="text" id="AppScreenCapture" class="inpt" onkeydown="IKeyDown(event,this)" onkeyup="IKeyUp(event,this)" onblur="IKeyUp(event,this)"></p>
+                  </div>
+         		  <div class="cmaRi">
+                        <div class="riTex"> 
+				                              酷我游戏盒<br />
+				          <p class="h10"></p>
+				          <p class="h10"></p>
+				       	   版本号：<span id="content"> 2.5.1.6</span><br />
+				          <p class="h10"></p>
+				          <p class="h10"></p>
+				                              版权所有: 北京酷我科技网络有限公司<br />
+                        </div>
+                  </div>
+            </div>
+            <p class="cmBtn"><a href="javascript:okFun()" class="ok">确定</a><a href="javascript:loadData()" class="back">还原</a></p>
+      </div>
+      
+      
+</body>
+</html>
